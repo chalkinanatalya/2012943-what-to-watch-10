@@ -16,7 +16,7 @@ export const films: Films = [
     director: 'Wes Anderson',
     starring: ['Bill Murray', 'Edward Norton', 'Jude Law', 'Willem Dafoe'],
     runTime: 96,
-    genre: 'Comedy',
+    genre: 'Crime',
     released: 2014,
     isFavorite: true
   },
@@ -56,7 +56,7 @@ export const films: Films = [
     director: 'Wes Anderson',
     starring: ['Bill Murray', 'Edward Norton', 'Jude Law', 'Willem Dafoe'],
     runTime: 96,
-    genre: 'Comedy',
+    genre: 'Crime',
     released: 2014,
     isFavorite: true
   },
@@ -116,7 +116,7 @@ export const films: Films = [
     director: 'Wes Anderson',
     starring: ['Bill Murray', 'Edward Norton', 'Jude Law', 'Willem Dafoe'],
     runTime: 96,
-    genre: 'Comedy',
+    genre: 'Horror',
     released: 2014,
     isFavorite: true
   },
@@ -156,7 +156,7 @@ export const films: Films = [
     director: 'Wes Anderson',
     starring: ['Bill Murray', 'Edward Norton', 'Jude Law', 'Willem Dafoe'],
     runTime: 96,
-    genre: 'Comedy',
+    genre: 'Romance',
     released: 2014,
     isFavorite: true
   },

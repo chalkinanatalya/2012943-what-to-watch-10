@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 import Videoplayer from '../../components/videoplayer/videoplayer';
-import { Film } from '../../types/film';
+import { useAppSelector } from '../../hooks';
 
 type PlayerProps = {
-  film: Film,
   autoplay: boolean,
 }
 
-function Player({ film, autoplay }: PlayerProps): JSX.Element {
+function Player({ autoplay }: PlayerProps): JSX.Element {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(autoplay);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const { promoFilm } = useAppSelector((state) => state);
 
   useEffect(() => {
     if (videoRef.current === null) {
@@ -24,7 +25,7 @@ function Player({ film, autoplay }: PlayerProps): JSX.Element {
 
   return (
     <div className="player">
-      <Videoplayer film={film} autoplay/>
+      <Videoplayer film={promoFilm} autoplay />
       <button type="button" className="player__exit">Exit</button>
 
       <div className="player__controls">

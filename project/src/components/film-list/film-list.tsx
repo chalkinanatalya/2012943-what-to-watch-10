@@ -9,7 +9,7 @@ function FilmList({ films }: FilmListProps): JSX.Element {
 
   return (
     <div className="catalog__films-list">
-      {films.map((film) => <FilmCard key={film.id} film={film}/>)}
+      {films.map((film) => <FilmCard key={film.id} film={film} />)}
     </div>
   );
 }

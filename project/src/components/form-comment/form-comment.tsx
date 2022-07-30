@@ -1,13 +1,12 @@
 import { ChangeEvent, FormEvent, Fragment, useState } from 'react';
-import { Film } from '../../types/film';
+import { useAppSelector } from '../../hooks';
 
-type FormCommentProps = {
-  film: Film,
-}
 
-function FormComment({ film }: FormCommentProps): JSX.Element {
+function FormComment(): JSX.Element {
+  const { films } = useAppSelector((state) => state);
+
   const [form, setForm] = useState({
-    id: film.id,
+    id: films[0].id,
     rating: '',
     reviewtext: ''
   });

@@ -5,17 +5,18 @@ import Header from '../../components/header/header';
 import NotFound from '../../components/not-found/not-found';
 import Tabs from '../../components/tabs/tabs';
 import { AppRoute } from '../../const';
-import { similarFilms } from '../../mocks/similar-films';
+import { useAppSelector } from '../../hooks';
 import { Comments } from '../../types/comment';
-import { Film, Films } from '../../types/film';
+import { Film } from '../../types/film';
 
 type FilmInfoProps = {
-  films: Films,
   comments: Comments,
 }
 
-function FilmInfo({ films, comments }: FilmInfoProps): JSX.Element {
+function FilmInfo({ comments }: FilmInfoProps): JSX.Element {
   const navigate = useNavigate();
+
+  const { films, similarFilms } = useAppSelector((state) => state);
 
   const { id } = useParams();
 

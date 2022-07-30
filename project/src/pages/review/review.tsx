@@ -1,19 +1,18 @@
-import { Film } from '../../types/film';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import Logo from '../../components/logo/logo';
 import FormComment from '../../components/form-comment/form-comment';
+import { useAppSelector } from '../../hooks';
 
-type ReviewProps = {
-  film: Film,
-}
 
-function AddReview({ film }: ReviewProps): JSX.Element {
+function AddReview(): JSX.Element {
+  const { promoFilm } = useAppSelector((state) => state);
+
   return (
-    <section className="film-card film-card--full " id={String(film.id)}>
+    <section className="film-card film-card--full " id={String(promoFilm.id)}>
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src={film.backgroundImage} alt='film' />
+          <img src={promoFilm.backgroundImage} alt='film' />
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -26,7 +25,7 @@ function AddReview({ film }: ReviewProps): JSX.Element {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <Link to={AppRoute.Film} className="breadcrumbs__link">{film.name}</Link>
+                <Link to={AppRoute.Film} className="breadcrumbs__link">{promoFilm.name}</Link>
               </li>
               <li className="breadcrumbs__item">
                 <Link to={AppRoute.AddReview} className="breadcrumbs__link">Add review</Link>
@@ -47,12 +46,12 @@ function AddReview({ film }: ReviewProps): JSX.Element {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src={film.posterImage} alt="The Grand Budapest Hotel poster" width="218" height="327" />
+          <img src={promoFilm.posterImage} alt="The Grand Budapest Hotel poster" width="218" height="327" />
         </div>
       </div>
 
       <div className="add-review">
-        <FormComment film={film} />
+        <FormComment />
       </div>
     </section>
   );
