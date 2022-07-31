@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { Genre } from '../const';
-import { films } from '../mocks/films';
+import { filmsList } from '../mocks/films';
 import { similarFilms } from '../mocks/similar-films';
 import { Film, Films } from '../types/film';
 import { selectGenre, getFilmsList } from './action';
@@ -13,10 +13,10 @@ type InitialStateType = {
 }
 
 const initialState: InitialStateType = {
-  films: films,
+  films: filmsList,
   genre: Genre.AllGenres,
   similarFilms: similarFilms,
-  promoFilm: films[0]
+  promoFilm: filmsList[0]
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -27,9 +27,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(getFilmsList, (state, action) => {
       if (state.genre === Genre.AllGenres) {
-        state.films = films;
+        state.films = filmsList;
       } else {
-        state.films = films.filter((film) => film.genre.toUpperCase() === state.genre);
+        state.films = filmsList.filter((film) => film.genre === state.genre);
       }
     });
 });

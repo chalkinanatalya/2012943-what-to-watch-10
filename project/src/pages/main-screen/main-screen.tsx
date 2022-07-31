@@ -51,7 +51,7 @@ function MainScreen(): JSX.Element {
 
         <Header login="Sign out" />
 
-        <PromoCard title={promoFilm.name} genre={promoFilm.genre} year={promoFilm.released} />
+        <PromoCard />
 
       </section>
 

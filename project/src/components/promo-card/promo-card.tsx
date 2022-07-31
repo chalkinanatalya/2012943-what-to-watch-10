@@ -1,27 +1,23 @@
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks';
 
-type PromoCardProps = {
-  title: string,
-  genre: string,
-  year: number
-}
+function PromoCard(): JSX.Element {
+  const { promoFilm } = useAppSelector((state) => state);
 
-
-function PromoCard({ title, genre, year }: PromoCardProps): JSX.Element {
   const navigate = useNavigate();
   return (
     <div className="film-card__wrap">
       <div className="film-card__info">
         <div className="film-card__poster">
-          <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327" />
+          <img src={promoFilm.posterImage} alt={`${promoFilm.name} poster`} width="218" height="327" />
         </div>
 
         <div className="film-card__desc">
-          <h2 className="film-card__title">{title}</h2>
+          <h2 className="film-card__title">{promoFilm.name}</h2>
           <p className="film-card__meta">
-            <span className="film-card__genre">{genre}</span>
-            <span className="film-card__year">{year}</span>
+            <span className="film-card__genre">{promoFilm.genre}</span>
+            <span className="film-card__year">{promoFilm.released}</span>
           </p>
 
           <div className="film-card__buttons">

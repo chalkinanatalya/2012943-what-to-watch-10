@@ -1,12 +1,13 @@
 import { ChangeEvent, FormEvent, Fragment, useState } from 'react';
-import { useAppSelector } from '../../hooks';
+import { useParams } from 'react-router-dom';
 
 
 function FormComment(): JSX.Element {
-  const { films } = useAppSelector((state) => state);
+
+  const { id } = useParams();
 
   const [form, setForm] = useState({
-    id: films[0].id,
+    id: id,
     rating: '',
     reviewtext: ''
   });

@@ -13,7 +13,7 @@ function FilmCard({ film }: FilmCardScreenProps): JSX.Element {
   const navigate = useNavigate();
 
   const mouseOver = (): void => {
-    setIsShowing(true);
+    setTimeout(() => setIsShowing(true), 1000);
   };
 
   const mouseLeave = (): void => {
@@ -25,7 +25,7 @@ function FilmCard({ film }: FilmCardScreenProps): JSX.Element {
       <div className="small-film-card__image" onMouseOver={mouseOver} onMouseLeave={mouseLeave}>
         {isShowing ?
           <Videoplayer film={film} autoplay />
-          : <img src={film.previewImage} alt="Fantastic Beasts: The Crimes of Grindelwald" width="280" height="175" onClick={() => navigate(AppRoute.Film)} />}
+          : <img src={film.previewImage} alt={film.name} width="280" height="175" onClick={() => navigate(AppRoute.Film)} />}
       </div>
       <h3 className="small-film-card__title">
         <Link to={generatePath(AppRoute.Film, { id: String(film.id) })} className="small-film-card__link">{film.name}</Link>
