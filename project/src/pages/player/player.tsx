@@ -5,14 +5,11 @@ import Videoplayer from '../../components/videoplayer/videoplayer';
 import { useAppSelector } from '../../hooks';
 import { Film } from '../../types/film';
 
-type PlayerProps = {
-  autoplay: boolean,
-}
 
-function Player({ autoplay }: PlayerProps): JSX.Element {
+function Player(): JSX.Element {
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(autoplay);
+  const [isPlaying, setIsPlaying] = useState(false);
   const { films } = useAppSelector((state) => state);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -33,7 +30,7 @@ function Player({ autoplay }: PlayerProps): JSX.Element {
   } else {
     return (
       <div className="player">
-        <Videoplayer film={selectedFilm} autoplay />
+        <Videoplayer film={selectedFilm} isPlaying={isPlaying}/>
         <button type="button" className="player__exit">Exit</button>
 
         <div className="player__controls">
