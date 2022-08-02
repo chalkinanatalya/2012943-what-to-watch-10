@@ -14,3 +14,5 @@ export enum AuthorizationStatus {
 }
 
 export const AllGENRES = 'All genres';
+
+export const FILMS_AMOUNT = 8;
