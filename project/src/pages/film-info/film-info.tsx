@@ -1,35 +1,39 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, Link, useNavigate, useParams } from 'react-router-dom';
 import FilmList from '../../components/film-list/film-list';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import NotFound from '../../components/not-found/not-found';
 import Tabs from '../../components/tabs/tabs';
 import { AppRoute } from '../../const';
-import { similarFilms } from '../../mocks/similar-films';
+import { useAppSelector } from '../../hooks';
 import { Comments } from '../../types/comment';
-import { Film, Films } from '../../types/film';
+import { Film } from '../../types/film';
 
 type FilmInfoProps = {
-  films: Films,
   comments: Comments,
 }
 
-function FilmInfo({ films, comments }: FilmInfoProps): JSX.Element {
+function FilmInfo({ comments }: FilmInfoProps): JSX.Element {
   const navigate = useNavigate();
+
+  const { films, similarFilms } = useAppSelector((state) => state);
 
   const { id } = useParams();
 
-  const promoFilm: Film | undefined = films.find((film) => String(film.id) === id);
+  const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
+  const filmCardStyle = {
+    background: selectedFilm ? selectedFilm.backgroundColor : '#fff'
+  };
 
-  if (!promoFilm) {
+  if (!selectedFilm) {
     return <NotFound />;
   } else {
     return (
       <>
-        <section className="film-card film-card--full">
+        <section className="film-card film-card--full" style={filmCardStyle}>
           <div className="film-card__hero">
             <div className="film-card__bg">
-              <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel" />
+              <img src={selectedFilm.backgroundImage} alt={selectedFilm.name} />
             </div>
 
             <h1 className="visually-hidden">WTW</h1>
@@ -37,19 +41,19 @@ function FilmInfo({ films, comments }: FilmInfoProps): JSX.Element {
 
             <div className="film-card__wrap">
               <div className="film-card__desc">
-                <h2 className="film-card__title">{promoFilm.name}</h2>
+                <h2 className="film-card__title">{selectedFilm.name}</h2>
                 <p className="film-card__meta">
-                  <span className="film-card__genre">{promoFilm.genre}</span>
-                  <span className="film-card__year">{promoFilm.released}</span>
+                  <span className="film-card__genre">{selectedFilm.genre}</span>
+                  <span className="film-card__year">{selectedFilm.released}</span>
                 </p>
 
                 <div className="film-card__buttons">
-                  <button className="btn btn--play film-card__button" type="button" onClick={() => navigate(AppRoute.Player)}>
+                  <Link to={generatePath(AppRoute.Player, { id: String(id) })} className="btn btn--play film-card__button">
                     <svg viewBox="0 0 19 19" width="19" height="19">
                       <use xlinkHref="#play-s"></use>
                     </svg>
                     <span>Play</span>
-                  </button>
+                  </Link>
                   <button className="btn btn--list film-card__button" type="button" onClick={() => navigate(AppRoute.MyList)}>
                     <svg viewBox="0 0 19 20" width="19" height="20">
                       <use xlinkHref="#add"></use>
@@ -57,7 +61,7 @@ function FilmInfo({ films, comments }: FilmInfoProps): JSX.Element {
                     <span>My list</span>
                     <span className="film-card__count">9</span>
                   </button>
-                  <Link to={AppRoute.AddReview} className="btn film-card__button">Add review</Link>
+                  <Link to={generatePath(AppRoute.AddReview, { id: String(id) })} className="btn film-card__button">Add review</Link>
                 </div>
               </div>
             </div>
@@ -66,11 +70,11 @@ function FilmInfo({ films, comments }: FilmInfoProps): JSX.Element {
           <div className="film-card__wrap film-card__translate-top">
             <div className="film-card__info">
               <div className="film-card__poster film-card__poster--big">
-                <img src={promoFilm.posterImage} alt="The Grand Budapest Hotel poster" width="218" height="327" />
+                <img src={selectedFilm.posterImage} alt={`${selectedFilm.name} poster`} width="218" height="327" />
               </div>
 
               <div className="film-card__desc">
-                <Tabs film={promoFilm} comments={comments} />
+                <Tabs film={selectedFilm} comments={comments} />
               </div>
             </div>
           </div>

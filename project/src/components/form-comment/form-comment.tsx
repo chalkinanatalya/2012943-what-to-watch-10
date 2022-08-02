@@ -1,13 +1,13 @@
 import { ChangeEvent, FormEvent, Fragment, useState } from 'react';
-import { Film } from '../../types/film';
+import { useParams } from 'react-router-dom';
 
-type FormCommentProps = {
-  film: Film,
-}
 
-function FormComment({ film }: FormCommentProps): JSX.Element {
+function FormComment(): JSX.Element {
+
+  const { id } = useParams();
+
   const [form, setForm] = useState({
-    id: film.id,
+    id: id,
     rating: '',
     reviewtext: ''
   });

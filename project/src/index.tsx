@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import App from './components/app/app';
 import { comments } from './mocks/comments';
-import { films } from './mocks/films';
+import { store } from './store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -10,6 +11,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <App films={films} film={films[0]} comments={comments}/>
+    <Provider store={store}>
+      <App comments={comments} />
+    </Provider>
   </React.StrictMode>,
 );

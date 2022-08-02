@@ -1,61 +1,72 @@
-import { Film } from '../../types/film';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import Logo from '../../components/logo/logo';
 import FormComment from '../../components/form-comment/form-comment';
+import { useAppSelector } from '../../hooks';
+import { Film } from '../../types/film';
+import NotFound from '../../components/not-found/not-found';
 
-type ReviewProps = {
-  film: Film,
-}
 
-function AddReview({ film }: ReviewProps): JSX.Element {
-  return (
-    <section className="film-card film-card--full " id={String(film.id)}>
-      <div className="film-card__header">
-        <div className="film-card__bg">
-          <img src={film.backgroundImage} alt='film' />
-        </div>
+function AddReview(): JSX.Element {
+  const { films } = useAppSelector((state) => state);
 
-        <h1 className="visually-hidden">WTW</h1>
+  const { id } = useParams();
 
-        <header className="page-header">
-          <div className="logo">
-            <Logo />
+  const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
+  const filmCardStyle = {
+    background: selectedFilm ? selectedFilm.backgroundColor : '#fff'
+  };
+  if (!selectedFilm) {
+    return <NotFound />;
+  } else {
+    return (
+      <section style={filmCardStyle} className="film-card film-card--full " id={String(selectedFilm.id)}>
+        <div className="film-card__header">
+          <div className="film-card__bg">
+            <img src={selectedFilm.backgroundImage} alt='film' />
           </div>
 
-          <nav className="breadcrumbs">
-            <ul className="breadcrumbs__list">
-              <li className="breadcrumbs__item">
-                <Link to={AppRoute.Film} className="breadcrumbs__link">{film.name}</Link>
+          <h1 className="visually-hidden">WTW</h1>
+
+          <header className="page-header">
+            <div className="logo">
+              <Logo />
+            </div>
+
+            <nav className="breadcrumbs">
+              <ul className="breadcrumbs__list">
+                <li className="breadcrumbs__item">
+                  <Link to={AppRoute.Film} className="breadcrumbs__link">{selectedFilm.name}</Link>
+                </li>
+                <li className="breadcrumbs__item">
+                  <Link to={AppRoute.AddReview} className="breadcrumbs__link">Add review</Link>
+                </li>
+              </ul>
+            </nav>
+
+            <ul className="user-block">
+              <li className="user-block__item">
+                <div className="user-block__avatar">
+                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
+                </div>
               </li>
-              <li className="breadcrumbs__item">
-                <Link to={AppRoute.AddReview} className="breadcrumbs__link">Add review</Link>
+              <li className="user-block__item">
+                <Link to={AppRoute.Main} className="user-block__link">Sign out</Link>
               </li>
             </ul>
-          </nav>
+          </header>
 
-          <ul className="user-block">
-            <li className="user-block__item">
-              <div className="user-block__avatar">
-                <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-              </div>
-            </li>
-            <li className="user-block__item">
-              <Link to={AppRoute.Main} className="user-block__link">Sign out</Link>
-            </li>
-          </ul>
-        </header>
-
-        <div className="film-card__poster film-card__poster--small">
-          <img src={film.posterImage} alt="The Grand Budapest Hotel poster" width="218" height="327" />
+          <div className="film-card__poster film-card__poster--small">
+            <img src={selectedFilm.posterImage} alt={selectedFilm.name} width="218" height="327" />
+          </div>
         </div>
-      </div>
 
-      <div className="add-review">
-        <FormComment film={film} />
-      </div>
-    </section>
-  );
+        <div className="add-review">
+          <FormComment />
+        </div>
+      </section>
+    );
+  }
 }
 
 export default AddReview;
