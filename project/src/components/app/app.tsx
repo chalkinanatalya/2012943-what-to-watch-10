@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks';
 import FilmInfo from '../../pages/film-info/film-info';
+import LoadingScreen from '../../pages/loading-screen/loading-screen';
 import MainScreen from '../../pages/main-screen/main-screen';
 import MyList from '../../pages/my-list/my-list';
 import Player from '../../pages/player/player';
@@ -16,7 +17,13 @@ type AppScreenProps = {
 }
 
 function App({ comments }: AppScreenProps): JSX.Element {
-  const { films } = useAppSelector((state) => state);
+  const { sortedFilms, isDataLoading } = useAppSelector((state) => state);
+
+  if (isDataLoading) {
+    return (
+      <LoadingScreen />
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -27,7 +34,7 @@ function App({ comments }: AppScreenProps): JSX.Element {
         <Route path={AppRoute.Player} element={<Player />} />
         <Route path={AppRoute.MyList} element={
           <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-            <MyList films={films} />
+            <MyList films={sortedFilms} />
           </PrivateRoute>
         }
         />
