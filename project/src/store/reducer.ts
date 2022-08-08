@@ -3,20 +3,24 @@ import { AllGENRES } from '../const';
 import { filmsList } from '../mocks/films';
 import { similarFilms } from '../mocks/similar-films';
 import { Film, Films } from '../types/film';
-import { selectGenre, getFilmsList } from './action';
+import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus } from './action';
 
 type InitialStateType = {
   films: Films,
+  sortedFilms: Films,
   genre: string,
-  similarFilms: Films
-  promoFilm: Film
+  similarFilms: Films,
+  promoFilm: Film,
+  isDataLoading: boolean,
 }
 
 const initialState: InitialStateType = {
-  films: filmsList,
+  films: [],
+  sortedFilms: [],
   genre: AllGENRES,
   similarFilms: similarFilms,
-  promoFilm: filmsList[0]
+  promoFilm: filmsList[0],
+  isDataLoading: true,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -25,12 +29,19 @@ const reducer = createReducer(initialState, (builder) => {
       const { genre } = action.payload;
       state.genre = genre;
     })
-    .addCase(getFilmsList, (state, action) => {
+    .addCase(getSortedFilmsList, (state, action) => {
       if (state.genre === AllGENRES) {
-        state.films = filmsList;
+        state.sortedFilms = state.films;
       } else {
-        state.films = filmsList.filter((film) => film.genre === state.genre);
+        state.sortedFilms = state.films.filter((film) => film.genre === state.genre);
       }
+    })
+    .addCase(loadFilms, (state, action) => {
+      state.films = action.payload;
+      state.sortedFilms = state.films;
+    })
+    .addCase(setDataLoadingStatus, (state, action) => {
+      state.isDataLoading = action.payload;
     });
 });
 
