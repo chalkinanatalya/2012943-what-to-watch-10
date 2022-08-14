@@ -37,7 +37,7 @@ function FilmInfo({ comments }: FilmInfoProps): JSX.Element {
             </div>
 
             <h1 className="visually-hidden">WTW</h1>
-            <Header login="Sign out" />
+            <Header />
 
             <div className="film-card__wrap">
               <div className="film-card__desc">
