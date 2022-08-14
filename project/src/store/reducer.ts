@@ -1,9 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { AllGENRES } from '../const';
+import { AllGENRES, AuthorizationStatus } from '../const';
 import { filmsList } from '../mocks/films';
 import { similarFilms } from '../mocks/similar-films';
 import { Film, Films } from '../types/film';
-import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus } from './action';
+import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus, requireAuthorization, setLoginError } from './action';
 
 type InitialStateType = {
   films: Films,
@@ -11,7 +11,9 @@ type InitialStateType = {
   genre: string,
   similarFilms: Films,
   promoFilm: Film,
+  authorizationStatus: AuthorizationStatus,
   isDataLoading: boolean,
+  loginError: string,
 }
 
 const initialState: InitialStateType = {
@@ -20,7 +22,9 @@ const initialState: InitialStateType = {
   genre: AllGENRES,
   similarFilms: similarFilms,
   promoFilm: filmsList[0],
+  authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoading: true,
+  loginError: '',
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -42,6 +46,12 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setDataLoadingStatus, (state, action) => {
       state.isDataLoading = action.payload;
+    })
+    .addCase(requireAuthorization, (state, action) => {
+      state.authorizationStatus = action.payload;
+    })
+    .addCase(setLoginError, (state, action) => {
+      state.loginError = action.payload;
     });
 });
 

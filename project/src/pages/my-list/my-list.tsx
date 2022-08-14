@@ -11,7 +11,7 @@ function MyList({ films }: MyListProps): JSX.Element {
 
   return (
     <div className="user-page">
-      <Header login='Sign out' />
+      <Header />
       <section className="catalog">
         <h2 className="catalog__title visually-hidden">Catalog</h2>
 
