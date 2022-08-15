@@ -4,10 +4,11 @@ import { Provider } from 'react-redux';
 import App from './components/app/app';
 import { comments } from './mocks/comments';
 import { store } from './store';
-import { checkAuthAction, fetchFilmsAction } from './store/api-actions';
+import { checkAuthAction, fetchFilmsAction, fetchPromoAction } from './store/api-actions';
 
 
 store.dispatch(fetchFilmsAction());
+store.dispatch(fetchPromoAction());
 store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(
@@ -21,3 +22,4 @@ root.render(
     </Provider>
   </React.StrictMode>,
 );
+

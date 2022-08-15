@@ -1,8 +1,8 @@
 import { generatePath, Link, useNavigate, useParams } from 'react-router-dom';
-import FilmList from '../../components/film-list/film-list';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import NotFound from '../../components/not-found/not-found';
+import SimilarFilms from '../../components/similar-films/similar-films';
 import Tabs from '../../components/tabs/tabs';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
@@ -16,9 +16,8 @@ type FilmInfoProps = {
 function FilmInfo({ comments }: FilmInfoProps): JSX.Element {
   const navigate = useNavigate();
 
-  const { films, similarFilms } = useAppSelector((state) => state);
-
   const { id } = useParams();
+  const { films } = useAppSelector((state) => state);
 
   const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
   const filmCardStyle = {
@@ -81,12 +80,7 @@ function FilmInfo({ comments }: FilmInfoProps): JSX.Element {
         </section>
 
         <div className="page-content">
-          <section className="catalog catalog--like-this">
-            <h2 className="catalog__title">More like this</h2>
-            <div className="catalog__films-list">
-              <FilmList films={similarFilms} />
-            </div>
-          </section>
+          <SimilarFilms filmId={id}/>
           <Footer />
         </div>
       </>

@@ -1,9 +1,27 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { AllGENRES, AuthorizationStatus } from '../const';
-import { filmsList } from '../mocks/films';
-import { similarFilms } from '../mocks/similar-films';
 import { Film, Films } from '../types/film';
-import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus, requireAuthorization, setLoginError } from './action';
+import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus, requireAuthorization, setLoginError, loadPromo, loadSimilar } from './action';
+
+export const emptyFilm: Film = {
+  id: -1,
+  name: '',
+  posterImage: '',
+  previewImage: '',
+  backgroundImage: '',
+  backgroundColor: '',
+  videoLink: '',
+  previewVideoLink: '',
+  description: '',
+  rating: -1,
+  scoresCount: -1,
+  director: '',
+  starring: [],
+  runTime: -1,
+  genre: '',
+  released: -1,
+  isFavorite: false,
+};
 
 type InitialStateType = {
   films: Films,
@@ -20,8 +38,8 @@ const initialState: InitialStateType = {
   films: [],
   sortedFilms: [],
   genre: AllGENRES,
-  similarFilms: similarFilms,
-  promoFilm: filmsList[0],
+  similarFilms: [],
+  promoFilm: emptyFilm,
   authorizationStatus: AuthorizationStatus.Unknown,
   isDataLoading: true,
   loginError: '',
@@ -43,6 +61,12 @@ const reducer = createReducer(initialState, (builder) => {
     .addCase(loadFilms, (state, action) => {
       state.films = action.payload;
       state.sortedFilms = state.films;
+    })
+    .addCase(loadSimilar, (state, action) => {
+      state.similarFilms = action.payload;
+    })
+    .addCase(loadPromo, (state, action) => {
+      state.promoFilm = action.payload;
     })
     .addCase(setDataLoadingStatus, (state, action) => {
       state.isDataLoading = action.payload;

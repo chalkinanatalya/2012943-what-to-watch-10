@@ -15,6 +15,7 @@ export enum AuthorizationStatus {
 
 export enum APIRoute {
   Films = '/films',
+  Similar = '/films/:filmId/similar',
   Promo = '/promo',
   Favorite = '/favorite',
   Comments = '/comments',
@@ -25,3 +26,5 @@ export enum APIRoute {
 export const AllGENRES = 'All genres';
 
 export const FILMS_AMOUNT = 8;
+
+
