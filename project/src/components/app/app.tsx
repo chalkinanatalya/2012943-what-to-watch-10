@@ -9,17 +9,12 @@ import MyList from '../../pages/my-list/my-list';
 import Player from '../../pages/player/player';
 import AddReview from '../../pages/review/review';
 import SignIn from '../../pages/sign-in/sign-in';
-import { Comments } from '../../types/comment';
 import HistoryRouter from '../history-route/history-route';
 import NotFound from '../not-found/not-found';
 import PrivateRoute from '../private-route/private-route';
 import PublicRoute from '../public-route/public-route';
 
-type AppScreenProps = {
-  comments: Comments,
-}
-
-function App({ comments }: AppScreenProps): JSX.Element {
+function App(): JSX.Element {
   const { authorizationStatus, sortedFilms, isDataLoading } = useAppSelector((state) => state);
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isDataLoading) {
@@ -40,7 +35,7 @@ function App({ comments }: AppScreenProps): JSX.Element {
         }
         />
 
-        <Route path={AppRoute.Film} element={<FilmInfo comments={comments} />} />
+        <Route path={AppRoute.Film} element={<FilmInfo />} />
         <Route path={AppRoute.Player} element={<Player />} />
 
         <Route path={AppRoute.MyList} element={

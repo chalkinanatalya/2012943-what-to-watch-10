@@ -3,15 +3,13 @@ import Details from '../details/details';
 import Overview from '../overview/overview';
 import FilmReview from '../film-review/film-review';
 import { Film } from '../../types/film';
-import { Comments } from '../../types/comment';
 
 type TabsProps = {
   film: Film,
-  comments: Comments,
 };
 
 
-function Tabs({ film, comments }: TabsProps): JSX.Element {
+function Tabs({ film }: TabsProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<string>('overview');
 
   const tab = () => {
@@ -21,7 +19,7 @@ function Tabs({ film, comments }: TabsProps): JSX.Element {
       case 'details':
         return <Details film={film} />;
       case 'filmreview':
-        return <FilmReview comments={comments} />;
+        return <FilmReview filmId={String(film.id)} />;
     }
   };
 
