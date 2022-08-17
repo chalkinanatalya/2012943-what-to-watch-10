@@ -51,7 +51,7 @@ function App(): JSX.Element {
           </PrivateRoute>
         }
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path={AppRoute.NotFound} element={<NotFound />} />
       </Routes>
     </HistoryRouter>
   );

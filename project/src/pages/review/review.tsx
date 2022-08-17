@@ -1,29 +1,26 @@
-import { Link, useParams } from 'react-router-dom';
+import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import Logo from '../../components/logo/logo';
 import FormComment from '../../components/form-comment/form-comment';
 import { useAppSelector } from '../../hooks';
-import { Film } from '../../types/film';
 import NotFound from '../../components/not-found/not-found';
+import LogSignBar from '../../components/log-sign-bar/log-sign-bar';
 
 
 function AddReview(): JSX.Element {
-  const { films } = useAppSelector((state) => state);
+  const { film } = useAppSelector((state) => state);
 
-  const { id } = useParams();
-
-  const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
   const filmCardStyle = {
-    background: selectedFilm ? selectedFilm.backgroundColor : '#fff'
+    background: film ? film.backgroundColor : '#fff'
   };
-  if (!selectedFilm) {
+  if (!film) {
     return <NotFound />;
   } else {
     return (
-      <section style={filmCardStyle} className="film-card film-card--full " id={String(selectedFilm.id)}>
+      <section style={filmCardStyle} className="film-card film-card--full " id={String(film.id)}>
         <div className="film-card__header">
           <div className="film-card__bg">
-            <img src={selectedFilm.backgroundImage} alt='film' />
+            <img src={film.backgroundImage} alt='film' />
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -36,28 +33,21 @@ function AddReview(): JSX.Element {
             <nav className="breadcrumbs">
               <ul className="breadcrumbs__list">
                 <li className="breadcrumbs__item">
-                  <Link to={AppRoute.Film} className="breadcrumbs__link">{selectedFilm.name}</Link>
+                  <Link to={generatePath(AppRoute.Film, { id: String(film.id) })} className="breadcrumbs__link">{film.name}</Link>
                 </li>
                 <li className="breadcrumbs__item">
-                  <Link to={AppRoute.AddReview} className="breadcrumbs__link">Add review</Link>
+                  <Link to={generatePath(AppRoute.AddReview, { id: String(film.id) })} className="breadcrumbs__link">Add review</Link>
                 </li>
               </ul>
             </nav>
 
             <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63" />
-                </div>
-              </li>
-              <li className="user-block__item">
-                <Link to={AppRoute.Main} className="user-block__link">Sign out</Link>
-              </li>
+              <LogSignBar />
             </ul>
           </header>
 
           <div className="film-card__poster film-card__poster--small">
-            <img src={selectedFilm.posterImage} alt={selectedFilm.name} width="218" height="327" />
+            <img src={film.posterImage} alt={film.name} width="218" height="327" />
           </div>
         </div>
 
