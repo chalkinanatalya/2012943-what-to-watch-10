@@ -1,11 +1,18 @@
-import { Comments } from '../../types/comment';
+import { useEffect } from 'react';
+import { useAppSelector } from '../../hooks';
+import { store } from '../../store';
+import { fetchCommentsAction } from '../../store/api-actions';
 import UserComment from '../user-comment/user-comment';
 
 type FilmReviewProps = {
-  comments: Comments,
+  filmId: string | undefined,
 }
 
-function FilmReview({ comments }: FilmReviewProps): JSX.Element {
+function FilmReview({ filmId }: FilmReviewProps): JSX.Element {
+  useEffect(() => {
+    store.dispatch(fetchCommentsAction(filmId));
+  }, [filmId]);
+  const { comments } = useAppSelector((state) => state);
 
   return (
     <div className="film-card__reviews film-card__row">

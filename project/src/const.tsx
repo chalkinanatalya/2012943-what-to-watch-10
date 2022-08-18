@@ -5,6 +5,7 @@ export enum AppRoute {
   Film = '/films/:id',
   AddReview = '/films/:id/review',
   Player = '/player/:id',
+  NotFound = '/404',
 }
 
 export enum AuthorizationStatus {
@@ -15,9 +16,11 @@ export enum AuthorizationStatus {
 
 export enum APIRoute {
   Films = '/films',
+  Film = '/films/:filmId',
+  Similar = '/films/:filmId/similar',
   Promo = '/promo',
   Favorite = '/favorite',
-  Comments = '/comments',
+  Comments = '/comments/:filmId',
   Login = '/login',
   Logout = '/logout',
 }
@@ -25,3 +28,5 @@ export enum APIRoute {
 export const AllGENRES = 'All genres';
 
 export const FILMS_AMOUNT = 8;
+
+

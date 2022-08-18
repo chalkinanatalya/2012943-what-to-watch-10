@@ -1,97 +1,102 @@
+import { useEffect } from 'react';
 import { generatePath, Link, useNavigate, useParams } from 'react-router-dom';
-import FilmList from '../../components/film-list/film-list';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
-import NotFound from '../../components/not-found/not-found';
+import SimilarFilms from '../../components/similar-films/similar-films';
 import Tabs from '../../components/tabs/tabs';
-import { AppRoute } from '../../const';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks';
-import { Comments } from '../../types/comment';
-import { Film } from '../../types/film';
+import { store } from '../../store';
+import { fetchOneFilmAction } from '../../store/api-actions';
+import LoadingScreen from '../loading-screen/loading-screen';
 
-type FilmInfoProps = {
-  comments: Comments,
-}
 
-function FilmInfo({ comments }: FilmInfoProps): JSX.Element {
+const addReviewButton = (authorizationStatus: string, id: string | undefined): JSX.Element | string => {
+  if (authorizationStatus === AuthorizationStatus.Auth) {
+    return (<Link to={generatePath(AppRoute.AddReview, { id: id })} className="btn film-card__button">Add review</Link>);
+  } else {
+    return '';
+  }
+};
+
+function FilmInfo(): JSX.Element {
   const navigate = useNavigate();
-
-  const { films, similarFilms } = useAppSelector((state) => state);
 
   const { id } = useParams();
 
-  const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
-  const filmCardStyle = {
-    background: selectedFilm ? selectedFilm.backgroundColor : '#fff'
-  };
+  useEffect(() => {
+    store.dispatch(fetchOneFilmAction(id));
+  }, [id]);
 
-  if (!selectedFilm) {
-    return <NotFound />;
-  } else {
+  const { film, authorizationStatus, isFilmLoading } = useAppSelector((state) => state);
+  if (isFilmLoading) {
     return (
-      <>
-        <section className="film-card film-card--full" style={filmCardStyle}>
-          <div className="film-card__hero">
-            <div className="film-card__bg">
-              <img src={selectedFilm.backgroundImage} alt={selectedFilm.name} />
-            </div>
-
-            <h1 className="visually-hidden">WTW</h1>
-            <Header />
-
-            <div className="film-card__wrap">
-              <div className="film-card__desc">
-                <h2 className="film-card__title">{selectedFilm.name}</h2>
-                <p className="film-card__meta">
-                  <span className="film-card__genre">{selectedFilm.genre}</span>
-                  <span className="film-card__year">{selectedFilm.released}</span>
-                </p>
-
-                <div className="film-card__buttons">
-                  <Link to={generatePath(AppRoute.Player, { id: String(id) })} className="btn btn--play film-card__button">
-                    <svg viewBox="0 0 19 19" width="19" height="19">
-                      <use xlinkHref="#play-s"></use>
-                    </svg>
-                    <span>Play</span>
-                  </Link>
-                  <button className="btn btn--list film-card__button" type="button" onClick={() => navigate(AppRoute.MyList)}>
-                    <svg viewBox="0 0 19 20" width="19" height="20">
-                      <use xlinkHref="#add"></use>
-                    </svg>
-                    <span>My list</span>
-                    <span className="film-card__count">9</span>
-                  </button>
-                  <Link to={generatePath(AppRoute.AddReview, { id: String(id) })} className="btn film-card__button">Add review</Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="film-card__wrap film-card__translate-top">
-            <div className="film-card__info">
-              <div className="film-card__poster film-card__poster--big">
-                <img src={selectedFilm.posterImage} alt={`${selectedFilm.name} poster`} width="218" height="327" />
-              </div>
-
-              <div className="film-card__desc">
-                <Tabs film={selectedFilm} comments={comments} />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="page-content">
-          <section className="catalog catalog--like-this">
-            <h2 className="catalog__title">More like this</h2>
-            <div className="catalog__films-list">
-              <FilmList films={similarFilms} />
-            </div>
-          </section>
-          <Footer />
-        </div>
-      </>
+      <LoadingScreen />
     );
   }
+
+  const filmCardStyle = {
+    background: film ? film.backgroundColor : '#fff'
+  };
+
+  return (
+    <>
+      <section className="film-card film-card--full" style={filmCardStyle}>
+        <div className="film-card__hero">
+          <div className="film-card__bg">
+            <img src={film.backgroundImage} alt={film.name} />
+          </div>
+
+          <h1 className="visually-hidden">WTW</h1>
+          <Header />
+
+          <div className="film-card__wrap">
+            <div className="film-card__desc">
+              <h2 className="film-card__title">{film.name}</h2>
+              <p className="film-card__meta">
+                <span className="film-card__genre">{film.genre}</span>
+                <span className="film-card__year">{film.released}</span>
+              </p>
+
+              <div className="film-card__buttons">
+                <Link to={generatePath(AppRoute.Player, { id: id })} className="btn btn--play film-card__button">
+                  <svg viewBox="0 0 19 19" width="19" height="19">
+                    <use xlinkHref="#play-s"></use>
+                  </svg>
+                  <span>Play</span>
+                </Link>
+                <button className="btn btn--list film-card__button" type="button" onClick={() => navigate(AppRoute.MyList)}>
+                  <svg viewBox="0 0 19 20" width="19" height="20">
+                    <use xlinkHref="#add"></use>
+                  </svg>
+                  <span>My list</span>
+                  <span className="film-card__count">9</span>
+                </button>
+                {addReviewButton(authorizationStatus, id)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="film-card__wrap film-card__translate-top">
+          <div className="film-card__info">
+            <div className="film-card__poster film-card__poster--big">
+              <img src={film.posterImage} alt={`${film.name} poster`} width="218" height="327" />
+            </div>
+
+            <div className="film-card__desc">
+              <Tabs film={film} />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="page-content">
+        <SimilarFilms filmId={id} />
+        <Footer />
+      </div>
+    </>
+  );
 }
 
 export default FilmInfo;
