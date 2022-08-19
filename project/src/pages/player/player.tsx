@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NotFound from '../../components/not-found/not-found';
 import Videoplayer from '../../components/videoplayer/videoplayer';
@@ -7,30 +7,18 @@ import { Film } from '../../types/film';
 
 
 function Player(): JSX.Element {
-
-  const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const { films } = useAppSelector((state) => state);
-
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const { id } = useParams();
 
   const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
 
-
-  useEffect(() => {
-    if (videoRef.current === null) {
-      return;
-    }
-
-    videoRef.current?.addEventListener('loadeddata', () => setIsLoading(false));
-  });
   if (!selectedFilm) {
     return <NotFound />;
   } else {
     return (
       <div className="player">
-        <Videoplayer film={selectedFilm} isPlaying={isPlaying}/>
+        <Videoplayer film={selectedFilm} isPlaying={isPlaying} delay={false}/>
         <button type="button" className="player__exit">Exit</button>
 
         <div className="player__controls">
@@ -43,7 +31,7 @@ function Player(): JSX.Element {
           </div>
 
           <div className="player__controls-row">
-            <button type="button" className={`player__${isPlaying ? 'pause' : 'play'}`} disabled={isLoading} onClick={() => setIsPlaying(!isPlaying)}>
+            <button type="button" className={`player__${isPlaying ? 'pause' : 'play'}`} onClick={() => setIsPlaying(!isPlaying)}>
               <svg viewBox="0 0 19 19" width="19" height="19">
                 <use xlinkHref="#play-s"></use>
               </svg>

@@ -1,14 +1,24 @@
-import { generatePath, Link } from 'react-router-dom';
+import { generatePath, Link, useParams } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import Logo from '../../components/logo/logo';
 import FormComment from '../../components/form-comment/form-comment';
 import { useAppSelector } from '../../hooks';
 import NotFound from '../../components/not-found/not-found';
 import LogSignBar from '../../components/log-sign-bar/log-sign-bar';
+import { useEffect } from 'react';
+import { fetchOneFilmAction } from '../../store/api-actions';
+import { store } from '../../store';
 
 
 function AddReview(): JSX.Element {
+  const { id } = useParams();
   const { film } = useAppSelector((state) => state);
+
+  useEffect(() => {
+    if (Number(id) !== film.id) {
+      store.dispatch(fetchOneFilmAction(id));
+    }
+  }, [film.id, id]);
 
   const filmCardStyle = {
     background: film ? film.backgroundColor : '#fff'

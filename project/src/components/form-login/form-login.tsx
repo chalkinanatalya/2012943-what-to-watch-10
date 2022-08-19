@@ -4,11 +4,17 @@ import { setLoginError } from '../../store/action';
 import { loginAction } from '../../store/api-actions';
 import { AuthData } from '../../types/auth-data';
 
-const setErrorMarkup = (loginError: string) => (
-  <div className="sign-in__message">
-    <p>{loginError}</p>
-  </div>
-);
+const setErrorMarkup = (loginError: string) => {
+  if (loginError !== '') {
+    return (
+      <div className="sign-in__message">
+        <p>{loginError}</p>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
 
 function FormLogin(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -37,7 +43,7 @@ function FormLogin(): JSX.Element {
 
   return (
     <form action="" className="sign-in__form" onSubmit={handleSubmit}>
-      {loginError !== '' ? setErrorMarkup(loginError) : null}
+      {setErrorMarkup(loginError)}
       <div className="sign-in__fields">
         <div className="sign-in__field">
           <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" ref={loginRef} />

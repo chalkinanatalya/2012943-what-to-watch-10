@@ -4,11 +4,17 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { postCommentAction } from '../../store/api-actions';
 import './comment-error.css';
 
-const setErrorMarkup = (commentError: string) => (
-  <div className="comment-error__message">
-    <p>{commentError}</p>
-  </div>
-);
+const getErrorMarkup = (commentError: string) => {
+  if (commentError !== '') {
+    return (
+      <div className="comment-error__message">
+        <p>{commentError}</p>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
 
 function FormComment(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -20,19 +26,19 @@ function FormComment(): JSX.Element {
   const [form, setForm] = useState({
     id: id,
     rating: '',
-    reviewtext: ''
+    reviewText: ''
   });
 
   const submitHandler = (evt: FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
-    dispatch(postCommentAction({ id: Number(form.id), comment: form.reviewtext, rating: Number(form.rating) }));
+    dispatch(postCommentAction({ id: Number(form.id), comment: form.reviewText, rating: Number(form.rating) }));
   };
 
   const formChangeHandler = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     if (buttonRef.current !== null) {
       const { name, value } = evt.currentTarget;
       setForm({ ...form, [name]: value });
-      if (form.reviewtext.length >= 50 && form.reviewtext.length <= 400 && form.rating !== '') {
+      if (form.reviewText.length >= 50 && form.reviewText.length <= 400 && form.rating !== '') {
         buttonRef.current.disabled = false;
       } else {
         buttonRef.current.disabled = true;
@@ -61,12 +67,12 @@ function FormComment(): JSX.Element {
       </div>
 
       <div className="add-review__text">
-        <textarea className="add-review__textarea" name="reviewtext" id="review-text" placeholder="Review text" value={form.reviewtext} onChange={formChangeHandler}></textarea>
+        <textarea className="add-review__textarea" name="reviewText" id="review-text" placeholder="Review text" value={form.reviewText} onChange={formChangeHandler}></textarea>
         <div className="add-review__submit">
           <button className="add-review__btn" type="submit" ref={buttonRef} disabled>Post</button>
         </div>
       </div>
-      {commentError !== '' ? setErrorMarkup(commentError) : null}
+      {getErrorMarkup(commentError)}
     </form>
   );
 }
