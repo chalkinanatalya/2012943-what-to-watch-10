@@ -1,12 +1,54 @@
+import { generatePath, Link } from 'react-router-dom';
 import Logo from '../../components/logo/logo';
+import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks';
+import { Film } from '../../types/film';
 import LogSignBar from '../log-sign-bar/log-sign-bar';
 
-function Header(): JSX.Element {
+type HeaderProps = {
+  page: string;
+}
+
+const headerClass = (page: string): string | undefined => {
+  switch (page) {
+    case 'My list':
+      return 'page-header user-page__head';
+    case 'Add review':
+      return 'page-header';
+    case 'Main':
+      return 'page-header film-card__head';
+  }
+};
+
+const extraInfo = (page: string, film: Film, length: number): JSX.Element | undefined => {
+  switch (page) {
+    case 'My list':
+      return <h1 className="page-title user-page__title">My list <span className="user-page__film-count">{length}</span></h1>;
+    case 'Add review':
+      return (
+        <nav className="breadcrumbs">
+          <ul className="breadcrumbs__list">
+            <li className="breadcrumbs__item">
+              <Link to={generatePath(AppRoute.Film, { id: String(film.id) })} className="breadcrumbs__link">{film.name}</Link>
+            </li>
+            <li className="breadcrumbs__item">
+              <Link to={generatePath(AppRoute.AddReview, { id: String(film.id) })} className="breadcrumbs__link">Add review</Link>
+            </li>
+          </ul>
+        </nav>
+      );
+  }
+};
+
+function Header({ page }: HeaderProps): JSX.Element {
+  const { favorite, film } = useAppSelector((state) => state);
+
   return (
-    <header className="page-header film-card__head">
+    <header className={headerClass(page)}>
       <div className="logo">
         <Logo />
       </div>
+      {extraInfo(page, film, favorite.length)}
       <ul className="user-block">
         <LogSignBar />
       </ul>

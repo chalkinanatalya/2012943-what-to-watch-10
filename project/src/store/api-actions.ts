@@ -2,7 +2,7 @@ import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state.js';
 import { Film, Films } from '../types/film';
-import { cleanOneFilm, loadComments, loadFilms, loadOneFilm, loadPromo, loadSimilar, redirectToRoute, requireAuthorization, setAvatar, setCommentError, setDataLoadingStatus, setFilmLoadingStatus, setLoginError } from './action';
+import { cleanOneFilm, loadComments, loadFavorite, loadFilms, loadOneFilm, loadPromo, loadSimilar, redirectToRoute, requireAuthorization, setAvatar, setCommentError, setDataLoadingStatus, setFilmLoadingStatus, setLoginError } from './action';
 import { APIRoute, AppRoute, AuthorizationStatus } from '../const';
 import { dropToken, saveToken } from '../services/token';
 import { AuthData } from '../types/auth-data.js';
@@ -10,6 +10,7 @@ import { UserData } from '../types/user-data.js';
 import { generatePath } from 'react-router-dom';
 import { Comments } from '../types/comment.js';
 import { CommentData } from '../types/comment-data.js';
+import { IsFavoriteData } from '../types/is-favorite-data.js';
 
 export const fetchFilmsAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -60,7 +61,6 @@ export const fetchOneFilmAction = createAsyncThunk<void, string | undefined, {
   },
 );
 
-
 export const fetchPromoAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
   state: State,
@@ -71,6 +71,19 @@ export const fetchPromoAction = createAsyncThunk<void, undefined, {
     dispatch(setDataLoadingStatus(true));
     const { data } = await api.get<Film>(APIRoute.Promo);
     dispatch(loadPromo(data));
+    dispatch(setDataLoadingStatus(false));
+  },
+);
+
+export const fetchFavoriteAction = createAsyncThunk<void, undefined, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/fetchFavorite',
+  async (_arg, { dispatch, extra: api }) => {
+    const { data } = await api.get<Films>(APIRoute.Favorite);
+    dispatch(loadFavorite(data));
     dispatch(setDataLoadingStatus(false));
   },
 );
@@ -96,12 +109,29 @@ export const postCommentAction = createAsyncThunk<void, CommentData, {
   'data/postComment',
   async ({ id, comment, rating }, { dispatch, extra: api }) => {
     await api.post<Comment>(generatePath(APIRoute.Comments, { filmId: String(id) }), { comment, rating })
-      .then((response: AxiosResponse) => {
+      .then(() => {
         dispatch(setCommentError(''));
         dispatch(redirectToRoute(generatePath(APIRoute.Film, { filmId: String(id) })));
       })
       .catch(() => {
         dispatch(setCommentError('Something went wrong, try again later'));
+      });
+  },
+);
+
+export const postIsFavoriteAction = createAsyncThunk<void, IsFavoriteData, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/postIsFavorite',
+  async ({ id, status, isPromo }, { dispatch, extra: api }) => {
+    await api.post<Film>(generatePath(APIRoute.IsFavorite, { filmId: String(id), status: String(status) }))
+      .then((response: AxiosResponse) => {
+        dispatch(loadOneFilm(response.data));
+        if (isPromo) {
+          dispatch(loadPromo(response.data));
+        }
       });
   },
 );

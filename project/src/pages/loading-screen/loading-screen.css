@@ -8,6 +8,7 @@
 	text-align: center;
 }
 
+
 @for $i from 1 through 29 {
 	#sparkles > path:nth-child(#{$i}) {
 		animation-delay: (35ms * $i);

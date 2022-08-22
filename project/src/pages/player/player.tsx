@@ -1,45 +1,107 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+/* eslint-disable no-console */
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../components/not-found/not-found';
-import Videoplayer from '../../components/videoplayer/videoplayer';
 import { useAppSelector } from '../../hooks';
 import { Film } from '../../types/film';
 
+const getPlayMarkup = (isPlaying: boolean): JSX.Element => (
+  <svg viewBox="0 0 19 19" width="19" height="19">
+    <use xlinkHref={isPlaying ? '#pause' : '#play-s'}></use>
+  </svg>
+);
 
 function Player(): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const { films } = useAppSelector((state) => state);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const spinnerRef = useRef<HTMLDivElement | null>(null);
+  const progressRef = useRef<HTMLProgressElement | null>(null);
+  const togglerRef = useRef<HTMLDivElement | null>(null);
+  const timerRef = useRef<HTMLDivElement | null>(null);
+
+  const formatTime = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor(seconds / 60);
+    const hoursString = (hours >= 10) ? hours : `0${hours}`;
+    const minutesString = (minutes >= 10) ? minutes - (hours * 60) : `0${minutes}`;
+    const secondsString = (seconds >= 10) ? seconds - (minutes * 60) : `0${seconds}`;
+
+    return (hours ? `-${hoursString}:${minutesString}:${secondsString}` : `-${minutesString}:${secondsString}`);
+  };
+
+  //useCallback
+  const changeVisibility = (display: string): void => {
+    if (spinnerRef.current) {
+      spinnerRef.current.style.display = display;
+    }
+  };
+
+  useEffect(() => {
+    if (!isPlaying) {
+      changeVisibility('none');
+      videoRef.current?.pause();
+    } else {
+      videoRef.current?.play();
+      videoRef.current?.addEventListener('waiting', () => changeVisibility('block'));
+      videoRef.current?.addEventListener('loadeddata', () => changeVisibility('none'));
+
+      progressRef.current?.addEventListener('click', (evt) => {
+        if (progressRef.current && videoRef.current && togglerRef.current && timerRef.current) {
+          const positionCoordinate = evt.offsetX - progressRef.current.offsetLeft;
+          const positionPercentage = Math.round(positionCoordinate * progressRef.current.max / progressRef.current.offsetWidth);
+
+          videoRef.current.currentTime = videoRef.current.duration * positionPercentage / 100;
+          togglerRef.current.style.left = `${positionPercentage}%`;
+        }
+      });
+
+      setInterval(() => {
+        if (progressRef.current && videoRef.current && togglerRef.current && timerRef.current) {
+          const calculate = videoRef.current.duration ? Math.round((videoRef.current.currentTime / videoRef.current.duration) * 100) : 0;
+          progressRef.current.value = calculate;
+          togglerRef.current.style.left = `${calculate}%`;
+          timerRef.current.innerHTML = formatTime(Math.round(videoRef.current.duration - videoRef.current.currentTime));
+        }
+      });
+    }
+  }, [isPlaying]);
 
   if (!selectedFilm) {
     return <NotFound />;
   } else {
     return (
       <div className="player">
-        <Videoplayer film={selectedFilm} isPlaying={isPlaying} delay={false}/>
-        <button type="button" className="player__exit">Exit</button>
+        <video src={selectedFilm.previewVideoLink} className="player__video" muted poster={selectedFilm.previewImage} preload="none" ref={videoRef}></video>
+        <div className="loader" ref={spinnerRef}>
+          <div className="inner one"></div>
+          <div className="inner two"></div>
+          <div className="inner three"></div>
+        </div>
+        <button type="button" className="player__exit" onClick={() => navigate(-1)}>Exit</button>
 
         <div className="player__controls">
           <div className="player__controls-row">
             <div className="player__time">
-              <progress className="player__progress" value="30" max="100"></progress>
-              <div className="player__toggler" style={{ left: '30%' }}>Toggler</div>
+              <progress className="player__progress" value="0" max="100" ref={progressRef}></progress>
+              <div className="player__toggler" style={{ left: '0' }} ref={togglerRef} >Toggler</div>
             </div>
-            <div className="player__time-value">1:30:29</div>
+            <div className="player__time-value" ref={timerRef}>{formatTime(selectedFilm.runTime * 60)}</div>
           </div>
 
           <div className="player__controls-row">
-            <button type="button" className={`player__${isPlaying ? 'pause' : 'play'}`} onClick={() => setIsPlaying(!isPlaying)}>
-              <svg viewBox="0 0 19 19" width="19" height="19">
-                <use xlinkHref="#play-s"></use>
-              </svg>
+            <button type="button" className="player__play" onClick={() => setIsPlaying(!isPlaying)}>
+              {getPlayMarkup(isPlaying)}
               <span>Play</span>
             </button>
             <div className="player__name">Transpotting</div>
 
-            <button type="button" className="player__full-screen">
+            <button type="button" className="player__full-screen" onClick={() => videoRef.current?.requestFullscreen()}>
               <svg viewBox="0 0 27 27" width="27" height="27">
                 <use xlinkHref="#full-screen"></use>
               </svg>

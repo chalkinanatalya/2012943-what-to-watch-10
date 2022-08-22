@@ -1,12 +1,12 @@
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/action';
+import MyListButton from '../my-list-button/my-list-button';
 
 function PromoCard(): JSX.Element {
   const { promoFilm } = useAppSelector((state) => state);
 
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   return (
@@ -30,13 +30,7 @@ function PromoCard(): JSX.Element {
               </svg>
               <span>Play</span>
             </button>
-            <button className="btn btn--list film-card__button" type="button" onClick={() => navigate(AppRoute.MyList)}>
-              <svg viewBox="0 0 19 20" width="19" height="20">
-                <use xlinkHref="#add"></use>
-              </svg>
-              <span>My list</span>
-              <span className="film-card__count">9</span>
-            </button>
+            <MyListButton filmType={'promo'} />
           </div>
         </div>
       </div >
