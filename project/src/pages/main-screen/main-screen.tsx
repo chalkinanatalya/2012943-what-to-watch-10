@@ -49,7 +49,7 @@ function MainScreen(): JSX.Element {
 
         <h1 className="visually-hidden">WTW</h1>
 
-        <Header />
+        <Header page={'Main'} />
 
         <PromoCard />
 

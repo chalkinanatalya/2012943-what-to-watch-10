@@ -5,7 +5,7 @@ import { fetchCommentsAction } from '../../store/api-actions';
 import UserComment from '../user-comment/user-comment';
 
 type FilmReviewProps = {
-  filmId: string | undefined,
+  filmId?: string,
 }
 
 function FilmReview({ filmId }: FilmReviewProps): JSX.Element {

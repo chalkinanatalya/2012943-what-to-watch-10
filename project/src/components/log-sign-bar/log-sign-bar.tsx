@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/api-actions';
@@ -6,12 +6,13 @@ import { logoutAction } from '../../store/api-actions';
 function LogSignBar(): JSX.Element {
   const { authorizationStatus, avatar } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   if (authorizationStatus === AuthorizationStatus.Auth) {
     return (
       <>
         <li className="user-block__item">
-          <div className="user-block__avatar">
+          <div className="user-block__avatar" onClick={() => navigate(AppRoute.MyList)}>
             <img src={avatar} alt="User avatar" width="63" height="63" />
           </div>
         </li>

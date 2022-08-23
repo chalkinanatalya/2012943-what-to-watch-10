@@ -11,6 +11,7 @@ export const loadSimilar = createAction<Films>('data/loadSimilar');
 export const loadOneFilm = createAction<Film>('data/loadOneFilm');
 export const cleanOneFilm = createAction('data/cleanOneFilm');
 export const loadPromo = createAction<Film>('data/loadPromo');
+export const loadFavorite = createAction<Films>('data/loadFavorite');
 export const loadComments = createAction<Comments>('data/loadComments');
 export const setCommentError = createAction<string>('user/setCommentError');
 export const setDataLoadingStatus = createAction<boolean>('data/setDataLoadingStatus');

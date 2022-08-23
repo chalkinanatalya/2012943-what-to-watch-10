@@ -1,5 +1,7 @@
+/* eslint-disable no-console */
 import { useEffect, useRef } from 'react';
 import { Film } from '../../types/film';
+import './videoplayer.css';
 
 type VideoPlayerProps = {
   film: Film,
@@ -23,6 +25,7 @@ function Videoplayer({ film, isPlaying }: VideoPlayerProps): JSX.Element {
   return (
     <video src={film.previewVideoLink} className="player__video" muted poster={film.previewImage} preload="none" ref={videoRef}></video>
   );
+
 }
 
 export default Videoplayer;

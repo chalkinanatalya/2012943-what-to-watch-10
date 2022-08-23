@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
-import { generatePath, Link, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, Link, useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
+import MyListButton from '../../components/my-list-button/my-list-button';
 import SimilarFilms from '../../components/similar-films/similar-films';
 import Tabs from '../../components/tabs/tabs';
 import { AppRoute, AuthorizationStatus } from '../../const';
@@ -20,7 +21,6 @@ const addReviewButton = (authorizationStatus: string, id: string | undefined): J
 };
 
 function FilmInfo(): JSX.Element {
-  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -48,7 +48,7 @@ function FilmInfo(): JSX.Element {
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
-          <Header />
+          <Header page={'Main'} />
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
@@ -65,13 +65,7 @@ function FilmInfo(): JSX.Element {
                   </svg>
                   <span>Play</span>
                 </Link>
-                <button className="btn btn--list film-card__button" type="button" onClick={() => navigate(AppRoute.MyList)}>
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                <MyListButton />
                 {addReviewButton(authorizationStatus, id)}
               </div>
             </div>

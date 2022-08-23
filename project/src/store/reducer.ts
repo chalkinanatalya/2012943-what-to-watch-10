@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { AllGENRES, AuthorizationStatus } from '../const';
 import { Comments } from '../types/comment';
 import { Film, Films } from '../types/film';
-import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus, requireAuthorization, setLoginError, loadPromo, loadSimilar, loadOneFilm, cleanOneFilm, loadComments, setCommentError, setFilmLoadingStatus, setAvatar } from './action';
+import { selectGenre, getSortedFilmsList, loadFilms, setDataLoadingStatus, requireAuthorization, setLoginError, loadPromo, loadSimilar, loadOneFilm, cleanOneFilm, loadComments, setCommentError, setFilmLoadingStatus, setAvatar, loadFavorite } from './action';
 
 export const emptyFilm: Film = {
   id: -1,
@@ -38,6 +38,7 @@ type InitialStateType = {
   isDataLoading: boolean,
   isFilmLoading: boolean,
   loginError: string,
+  favorite: Films
 }
 
 const initialState: InitialStateType = {
@@ -54,6 +55,7 @@ const initialState: InitialStateType = {
   isDataLoading: true,
   isFilmLoading: true,
   loginError: '',
+  favorite: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -87,6 +89,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadPromo, (state, action) => {
       state.promoFilm = action.payload;
+    })
+    .addCase(loadFavorite, (state, action) => {
+      state.favorite = action.payload;
     })
     .addCase(loadComments, (state, action) => {
       state.comments = action.payload;
