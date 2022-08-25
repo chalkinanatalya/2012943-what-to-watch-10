@@ -12,7 +12,7 @@ function GenresList(): JSX.Element {
 
   const { films, genre, sortedFilms } = useAppSelector((state) => state);
 
-  const changeGenre = (evt: MouseEvent<HTMLAnchorElement>) => {
+  const changeGenreHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
     setFilmsToShow(FILMS_AMOUNT);
     dispatch(selectGenre({ genre: evt.currentTarget.id }));
     dispatch(getSortedFilmsList());
@@ -30,7 +30,7 @@ function GenresList(): JSX.Element {
       <h2 className="catalog__title visually-hidden">Catalog</h2>
 
       <ul className="catalog__genres-list">
-        {genres.map((tabGenre) => (<li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}> <a href="#" className="catalog__genres-link" id={tabGenre} onClick={changeGenre}>{tabGenre}</a> </li>))}
+        {genres.map((tabGenre) => (<li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}> <a href="#" className="catalog__genres-link" id={tabGenre} onClick={changeGenreHandler}>{tabGenre}</a> </li>))}
       </ul>
       <FilmList films={sortedFilms.slice(0, filmsToShow)} />
       {sortedFilms.length > filmsToShow ? <div className="catalog__more"> <ShowButton onShowMore={showMoreHandler} /> </div> : ''}
