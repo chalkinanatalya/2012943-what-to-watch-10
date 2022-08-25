@@ -18,7 +18,7 @@ function SimilarFilms({ filmId }: SimilarFilmsProps): JSX.Element {
     <section className="catalog catalog--like-this">
       <h2 className="catalog__title">More like this</h2>
       <div className="catalog__films-list">
-        <FilmList films={similarFilms} />
+        <FilmList films={similarFilms.slice(0, 4)} />
       </div>
     </section>
   );

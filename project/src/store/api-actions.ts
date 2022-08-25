@@ -126,7 +126,7 @@ export const postIsFavoriteAction = createAsyncThunk<void, IsFavoriteData, {
 }>(
   'data/postIsFavorite',
   async ({ id, status, isPromo }, { dispatch, extra: api }) => {
-    await api.post<Film>(generatePath(APIRoute.IsFavorite, { filmId: String(id), status: String(status) }))
+    await api.post<Film>(generatePath(APIRoute.StatusFavorite, { filmId: String(id), status: String(status) }))
       .then((response: AxiosResponse) => {
         dispatch(loadOneFilm(response.data));
         if (isPromo) {
