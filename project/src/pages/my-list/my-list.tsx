@@ -2,6 +2,7 @@ import FilmList from '../../components/film-list/film-list';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import { useAppSelector } from '../../hooks';
+import { getFavorite } from '../../store/film-store/selector';
 import { Films } from '../../types/film';
 
 type MyListProps = {
@@ -9,7 +10,7 @@ type MyListProps = {
 }
 
 function MyList({ films }: MyListProps): JSX.Element {
-  const { favorite } = useAppSelector((state) => state);
+  const favorite = useAppSelector(getFavorite);
 
   return (
     <div className="user-page">

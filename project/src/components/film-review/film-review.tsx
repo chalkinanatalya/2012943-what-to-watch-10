@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchCommentsAction } from '../../store/api-actions';
+import { getComments } from '../../store/comment-store/selector';
 import UserComment from '../user-comment/user-comment';
 
 type FilmReviewProps = {
@@ -12,7 +13,7 @@ function FilmReview({ filmId }: FilmReviewProps): JSX.Element {
   useEffect(() => {
     store.dispatch(fetchCommentsAction(filmId));
   }, [filmId]);
-  const { comments } = useAppSelector((state) => state);
+  const comments = useAppSelector(getComments);
 
   return (
     <div className="film-card__reviews film-card__row">

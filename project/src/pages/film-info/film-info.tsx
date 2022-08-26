@@ -9,6 +9,8 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchOneFilmAction } from '../../store/api-actions';
+import { getFilm, getIsFilmLoading } from '../../store/film-store/selector';
+import { getAuthorizationStatus } from '../../store/user-store/selector';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 
@@ -28,7 +30,10 @@ function FilmInfo(): JSX.Element {
     store.dispatch(fetchOneFilmAction(id));
   }, [id]);
 
-  const { film, authorizationStatus, isFilmLoading } = useAppSelector((state) => state);
+  const film = useAppSelector(getFilm);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isFilmLoading = useAppSelector(getIsFilmLoading);
+
   if (isFilmLoading) {
     return (
       <LoadingScreen />

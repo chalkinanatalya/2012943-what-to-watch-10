@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import NotFound from '../../components/not-found/not-found';
 import { useAppSelector } from '../../hooks';
+import { getFilms } from '../../store/film-store/selector';
 import { Film } from '../../types/film';
 
 const getPlayMarkup = (isPlaying: boolean): JSX.Element => (
@@ -12,7 +13,7 @@ const getPlayMarkup = (isPlaying: boolean): JSX.Element => (
 
 function Player(): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
-  const { films } = useAppSelector((state) => state);
+  const films = useAppSelector(getFilms);
   const { id } = useParams();
   const navigate = useNavigate();
 

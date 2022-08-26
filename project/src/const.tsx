@@ -26,8 +26,12 @@ export enum APIRoute {
   Logout = '/logout',
 }
 
+export enum NameSpace {
+  Film = 'FILM',
+  User = 'USER',
+  Comment = 'COMMENT'
+}
+
 export const AllGENRES = 'All genres';
 
 export const FILMS_AMOUNT = 8;
-
-

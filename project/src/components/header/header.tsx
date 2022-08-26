@@ -2,6 +2,7 @@ import { generatePath, Link } from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
+import { getFavorite, getFilm } from '../../store/film-store/selector';
 import { Film } from '../../types/film';
 import LogSignBar from '../log-sign-bar/log-sign-bar';
 
@@ -47,7 +48,8 @@ const extraInfo = (page: string, film: Film, length: number): JSX.Element | unde
 };
 
 function Header({ page }: HeaderProps): JSX.Element {
-  const { favorite, film } = useAppSelector((state) => state);
+  const favorite = useAppSelector(getFavorite);
+  const film = useAppSelector(getFilm);
 
   return (
     <header className={headerClass(page)}>

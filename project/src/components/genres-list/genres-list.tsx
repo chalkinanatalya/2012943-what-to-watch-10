@@ -1,16 +1,19 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import FilmList from '../film-list/film-list';
-import { selectGenre, getSortedFilmsList } from '../../store/action';
+import { selectGenre, getSortedFilmsList } from '../../store/film-store/film-store';
 import { MouseEvent, useState } from 'react';
-import ShowButton from '../show-button/show-button';
+import ShowButton from '../header/show-button/show-button';
 import { FILMS_AMOUNT } from '../../const';
+import { getFilms, getGenre, getSortedFilms } from '../../store/film-store/selector';
 
 function GenresList(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [filmsToShow, setFilmsToShow] = useState(FILMS_AMOUNT);
 
-  const { films, genre, sortedFilms } = useAppSelector((state) => state);
+  const films = useAppSelector(getFilms);
+  const genre = useAppSelector(getGenre);
+  const sortedFilms = useAppSelector(getSortedFilms);
 
   const changeGenreHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
     setFilmsToShow(FILMS_AMOUNT);

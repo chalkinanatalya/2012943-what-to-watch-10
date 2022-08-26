@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent, Fragment, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { postCommentAction } from '../../store/api-actions';
+import { getCommentError } from '../../store/comment-store/selector';
 import './comment-error.css';
 
 const getErrorMarkup = (commentError: string) => {
@@ -18,7 +19,7 @@ const getErrorMarkup = (commentError: string) => {
 
 function FormComment(): JSX.Element {
   const dispatch = useAppDispatch();
-  const { commentError } = useAppSelector((state) => state);
+  const commentError = useAppSelector(getCommentError);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const { id } = useParams();

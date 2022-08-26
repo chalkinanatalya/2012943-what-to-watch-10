@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { redirectToRoute } from '../../store/action';
 import { fetchFavoriteAction, postIsFavoriteAction } from '../../store/api-actions';
+import { getFavorite, getFilm, getPromoFilm } from '../../store/film-store/selector';
+import { getAuthorizationStatus } from '../../store/user-store/selector';
 import { Film } from '../../types/film';
 
 type MyListButtonProps = {
@@ -11,7 +13,11 @@ type MyListButtonProps = {
 }
 
 function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
-  const { film, promoFilm, favorite, authorizationStatus } = useAppSelector((state) => state);
+  const film = useAppSelector(getFilm);
+  const promoFilm = useAppSelector(getPromoFilm);
+  const favorite = useAppSelector(getFavorite);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+
   const selectedFilm: Film = filmType === 'film' ? film : promoFilm;
   const isPromo = filmType === 'promo';
   const dispatch = useAppDispatch();

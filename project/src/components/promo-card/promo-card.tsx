@@ -2,10 +2,11 @@ import { generatePath } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/action';
+import { getPromoFilm } from '../../store/film-store/selector';
 import MyListButton from '../my-list-button/my-list-button';
 
 function PromoCard(): JSX.Element {
-  const { promoFilm } = useAppSelector((state) => state);
+  const promoFilm = useAppSelector(getPromoFilm);
 
   const dispatch = useAppDispatch();
 

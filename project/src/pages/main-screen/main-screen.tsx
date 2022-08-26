@@ -3,10 +3,11 @@ import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import { useAppSelector } from '../../hooks';
 import GenresList from '../../components/genres-list/genres-list';
+import { getPromoFilm } from '../../store/film-store/selector';
 
 
 function MainScreen(): JSX.Element {
-  const { promoFilm } = useAppSelector((state) => state);
+  const promoFilm = useAppSelector(getPromoFilm);
 
   return (
     <>

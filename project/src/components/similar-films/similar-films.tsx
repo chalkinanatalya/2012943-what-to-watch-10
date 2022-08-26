@@ -3,6 +3,7 @@ import FilmList from '../film-list/film-list';
 import { store } from '../../store';
 import { fetchSimilarAction } from '../../store/api-actions';
 import { useEffect } from 'react';
+import { getSimilarFilms } from '../../store/film-store/selector';
 
 type SimilarFilmsProps = {
   filmId: string | undefined,
@@ -12,7 +13,7 @@ function SimilarFilms({ filmId }: SimilarFilmsProps): JSX.Element {
   useEffect(() => {
     store.dispatch(fetchSimilarAction(filmId));
   }, [filmId]);
-  const { similarFilms } = useAppSelector((state) => state);
+  const similarFilms = useAppSelector(getSimilarFilms);
 
   return (
     <section className="catalog catalog--like-this">
