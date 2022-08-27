@@ -3,6 +3,7 @@ import Details from '../details/details';
 import Overview from '../overview/overview';
 import FilmReview from '../film-review/film-review';
 import { Film } from '../../types/film';
+import './tabs.css';
 
 type TabsProps = {
   film: Film,

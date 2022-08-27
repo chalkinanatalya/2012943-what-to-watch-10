@@ -1,9 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { store } from '..';
-import { AppRoute, AuthorizationStatus, NameSpace } from '../../const';
+import { AuthorizationStatus, NameSpace } from '../../const';
 import { dropToken, saveToken } from '../../services/token';
 import { UserStore } from '../../types/user-store';
-import { redirectToRoute } from '../action';
 import { checkAuthAction, loginAction, logoutAction } from '../api-actions';
 
 const initialState: UserStore = {
@@ -31,16 +29,13 @@ export const userStore = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
-        saveToken(action.payload.token);
-        state.avatar = action.payload.avatarUrl;
-        state.loginError = '';
-        state.authorizationStatus = AuthorizationStatus.Auth;
-        store.dispatch(redirectToRoute(AppRoute.Main));
-      })
-      .addCase(loginAction.rejected, (state, action) => {
-        if (action.payload === 400) {
+        if (action.payload) {
+          saveToken(action.payload.token);
+          state.avatar = action.payload.avatarUrl;
+          state.loginError = '';
+          state.authorizationStatus = AuthorizationStatus.Auth;
+        } else {
           state.loginError = 'Please enter a valid email address';
-          store.dispatch(redirectToRoute(AppRoute.SignIn));
         }
       })
       .addCase(logoutAction.fulfilled, (state, action) => {

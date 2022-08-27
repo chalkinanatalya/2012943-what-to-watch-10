@@ -1,8 +1,8 @@
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 import { Film, Films } from '../types/film';
-import { APIRoute } from '../const';
+import { APIRoute, AppRoute } from '../const';
 import { AuthData } from '../types/auth-data';
 import { UserData } from '../types/user-data';
 import { generatePath } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { Comments } from '../types/comment';
 import { CommentData } from '../types/comment-data';
 import { IsFavoriteData } from '../types/is-favorite-data';
 import { IsFavoriteAction } from '../types/is-favorite-action';
+import { redirectToRoute } from './action';
 
 export const fetchFilmsAction = createAsyncThunk<Films, undefined, {
   dispatch: AppDispatch,
@@ -35,14 +36,21 @@ export const fetchSimilarAction = createAsyncThunk<Films, string | undefined, {
   },
 );
 
-export const fetchOneFilmAction = createAsyncThunk<Film, string | undefined, {
+export const fetchOneFilmAction = createAsyncThunk<Film | void, string | undefined, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
-  'filmData/fetchOneFilm',
+  'data/fetchOneFilm',
   async (filmId, { dispatch, extra: api }) => {
-    const { data } = await api.get<Film>(generatePath(APIRoute.Film, { filmId: filmId }));
+    let data;
+    await api.get<Film>(generatePath(APIRoute.Film, { filmId: filmId }))
+      .then((response: AxiosResponse) => {
+        data = response.data;
+      })
+      .catch((reason: AxiosError) => {
+        dispatch(redirectToRoute(AppRoute.NotFound));
+      });
     return data;
   },
 );
@@ -95,14 +103,21 @@ export const checkAuthAction = createAsyncThunk<UserData, undefined, {
   },
 );
 
-export const loginAction = createAsyncThunk<UserData, AuthData, {
+export const loginAction = createAsyncThunk<UserData | void, AuthData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'user/login',
   async ({ login: email, password }, { dispatch, extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
+    let data;
+    await api.post<UserData>(APIRoute.Login, { email, password })
+      .then((response: AxiosResponse) => {
+        data = response.data;
+      })
+      .catch((reason: AxiosError) => {
+        dispatch(redirectToRoute(AppRoute.SignIn));
+      });
     return data;
   },
 );
@@ -115,6 +130,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   'user/logout',
   async (_arg, { dispatch, extra: api }) => {
     await api.delete(APIRoute.Logout);
+    dispatch(redirectToRoute(AppRoute.Main));
   },
 );
 
@@ -130,7 +146,7 @@ export const fetchCommentsAction = createAsyncThunk<Comments, string | undefined
   },
 );
 
-export const postCommentAction = createAsyncThunk<number, CommentData, {
+export const postCommentAction = createAsyncThunk<void, CommentData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
@@ -138,6 +154,6 @@ export const postCommentAction = createAsyncThunk<number, CommentData, {
   'comment/postComment',
   async ({ id, comment, rating }, { dispatch, extra: api }) => {
     await api.post<Comment>(generatePath(APIRoute.Comments, { filmId: String(id) }), { comment, rating });
-    return id;
+    dispatch(redirectToRoute(generatePath(APIRoute.Film, { filmId: String(id) })));
   },
 );

@@ -1,4 +1,4 @@
-import { generatePath } from 'react-router-dom';
+import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/action';
@@ -9,6 +9,7 @@ function PromoCard(): JSX.Element {
   const promoFilm = useAppSelector(getPromoFilm);
 
   const dispatch = useAppDispatch();
+  const path = generatePath(AppRoute.Film, { id: String(promoFilm.id) });
 
   return (
     <div className="film-card__wrap">
@@ -18,7 +19,7 @@ function PromoCard(): JSX.Element {
         </div>
 
         <div className="film-card__desc">
-          <h2 className="film-card__title">{promoFilm.name}</h2>
+          <Link to={path} className="small-film-card__link"><h2 className="film-card__title">{promoFilm.name}</h2></Link>
           <p className="film-card__meta">
             <span className="film-card__genre">{promoFilm.genre}</span>
             <span className="film-card__year">{promoFilm.released}</span>

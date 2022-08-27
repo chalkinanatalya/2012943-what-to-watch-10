@@ -1,9 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { store } from '..';
-import { AllGENRES, AppRoute, NameSpace } from '../../const';
+import { AllGENRES, NameSpace } from '../../const';
 import { Film } from '../../types/film';
 import { FilmStore } from '../../types/film-store';
-import { redirectToRoute } from '../action';
 import { fetchFavoriteAction, fetchFilmsAction, fetchOneFilmAction, fetchPromoAction, fetchSimilarAction, postIsFavoriteAction } from '../api-actions';
 
 export const emptyFilm: Film = {
@@ -75,14 +73,10 @@ export const filmStore = createSlice({
         state.isFilmLoading = true;
       })
       .addCase(fetchOneFilmAction.fulfilled, (state, action) => {
-        state.film = action.payload;
-        state.isFilmLoading = false;
-      })
-      .addCase(fetchOneFilmAction.rejected, (state, action) => {
-        if (action.error.message === 'Request failed with status code 404') {
-          state.isFilmLoading = false;
-          store.dispatch(redirectToRoute(AppRoute.NotFound));
+        if (action.payload) {
+          state.film = action.payload;
         }
+        state.isFilmLoading = false;
       })
       .addCase(fetchPromoAction.pending, (state) => {
         state.isDataLoading = true;

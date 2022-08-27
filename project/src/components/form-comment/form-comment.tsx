@@ -1,9 +1,9 @@
-import { ChangeEvent, FormEvent, Fragment, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { postCommentAction } from '../../store/api-actions';
 import { getCommentError } from '../../store/comment-store/selector';
-import './comment-error.css';
+import './form-comment.css';
 
 const getErrorMarkup = (commentError: string) => {
   if (commentError !== '') {
@@ -30,6 +30,16 @@ function FormComment(): JSX.Element {
     reviewText: ''
   });
 
+  useEffect(() => {
+    if (buttonRef.current) {
+      if (form.reviewText.length >= 50 && form.reviewText.length <= 400 && form.rating !== '') {
+        buttonRef.current.disabled = false;
+      } else {
+        buttonRef.current.disabled = true;
+      }
+    }
+  });
+
   const submitHandler = (evt: FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
     dispatch(postCommentAction({ id: Number(form.id), comment: form.reviewText, rating: Number(form.rating) }));
@@ -39,11 +49,6 @@ function FormComment(): JSX.Element {
     if (buttonRef.current !== null) {
       const { name, value } = evt.currentTarget;
       setForm({ ...form, [name]: value });
-      if (form.reviewText.length >= 50 && form.reviewText.length <= 400 && form.rating !== '') {
-        buttonRef.current.disabled = false;
-      } else {
-        buttonRef.current.disabled = true;
-      }
     }
   };
 
