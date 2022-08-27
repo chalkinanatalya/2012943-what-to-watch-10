@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { generatePath, Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -26,7 +27,7 @@ function PromoCard(): JSX.Element {
           </p>
 
           <div className="film-card__buttons">
-            <button className="btn btn--play film-card__button" type="button" onClick={() => dispatch(redirectToRoute(generatePath(AppRoute.Player, { id: String(promoFilm.id) })))} >
+            <button className="btn btn--play film-card__button" type="button" onClick={() => dispatch(redirectToRoute(generatePath(AppRoute.Player, { id: String(promoFilm.id), filmType: 'promo' })))} >
               <svg viewBox="0 0 19 19" width="19" height="19" >
                 <use xlinkHref="#play-s"></use>
               </svg>
@@ -40,4 +41,4 @@ function PromoCard(): JSX.Element {
   );
 }
 
-export default PromoCard;
+export default memo(PromoCard);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
@@ -19,23 +19,24 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const selectedFilm: Film = filmType === 'film' ? film : promoFilm;
-  const isPromo = filmType === 'promo';
   const dispatch = useAppDispatch();
 
-  const isAuthorizedHandler = () => {
+  const addToFavoriteHandler = () => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(postIsFavoriteAction({ id: selectedFilm.id, status: Number(!selectedFilm.isFavorite), isPromo: isPromo }));
+      dispatch(postIsFavoriteAction({ id: selectedFilm.id, status: Number(!selectedFilm.isFavorite) }));
     } else {
       dispatch(redirectToRoute(AppRoute.SignIn));
     }
   };
 
   useEffect(() => {
-    store.dispatch(fetchFavoriteAction());
-  }, [film]);
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      store.dispatch(fetchFavoriteAction());
+    }
+  }, [authorizationStatus, film]);
 
   return (
-    <button className="btn btn--list film-card__button" type="button" onClick={() => isAuthorizedHandler()}>
+    <button className="btn btn--list film-card__button" type="button" onClick={() => addToFavoriteHandler()}>
       <svg viewBox="0 0 19 20" width="19" height="20">
         {selectedFilm.isFavorite && authorizationStatus === AuthorizationStatus.Auth ? <use xlinkHref="#in-list"></use> : <use xlinkHref="#add"></use>}
       </svg>
@@ -48,4 +49,5 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
 MyListButton.defaultProps = {
   filmType: 'film',
 };
-export default MyListButton;
+
+export default memo(MyListButton);

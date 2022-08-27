@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getToken } from './token';
 

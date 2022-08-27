@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import NotFound from '../../components/not-found/not-found';
-import { useAppSelector } from '../../hooks';
+import { AppRoute } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { redirectToRoute } from '../../store/action';
 import { getFilms } from '../../store/film-store/selector';
 import { Film } from '../../types/film';
+import './player.css';
 
 const getPlayMarkup = (isPlaying: boolean): JSX.Element => (
   <svg viewBox="0 0 19 19" width="19" height="19">
@@ -14,8 +17,8 @@ const getPlayMarkup = (isPlaying: boolean): JSX.Element => (
 function Player(): JSX.Element {
   const [isPlaying, setIsPlaying] = useState(false);
   const films = useAppSelector(getFilms);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id, filmType } = useParams();
+  const dispatch = useAppDispatch();
 
   const selectedFilm: Film | undefined = films.find((film) => String(film.id) === id);
 
@@ -35,10 +38,17 @@ function Player(): JSX.Element {
     return (hours ? `-${hoursString}:${minutesString}:${secondsString}` : `-${minutesString}:${secondsString}`);
   };
 
-  //useCallback
   const changeVisibility = (display: string): void => {
     if (spinnerRef.current) {
       spinnerRef.current.style.display = display;
+    }
+  };
+
+  const backToFilmHandler = (): void => {
+    if (filmType === 'film') {
+      dispatch(redirectToRoute(generatePath(AppRoute.Film, { id: id })));
+    } else if (filmType === 'promo') {
+      dispatch(redirectToRoute(AppRoute.Main));
     }
   };
 
@@ -50,12 +60,12 @@ function Player(): JSX.Element {
       videoRef.current?.play();
       videoRef.current?.addEventListener('waiting', () => changeVisibility('block'));
       videoRef.current?.addEventListener('loadeddata', () => changeVisibility('none'));
+      videoRef.current?.addEventListener('playing', () => changeVisibility('none'));
 
       progressRef.current?.addEventListener('click', (evt) => {
         if (progressRef.current && videoRef.current && togglerRef.current && timerRef.current) {
           const positionCoordinate = evt.offsetX - progressRef.current.offsetLeft;
           const positionPercentage = Math.round(positionCoordinate * progressRef.current.max / progressRef.current.offsetWidth);
-
           videoRef.current.currentTime = videoRef.current.duration * positionPercentage / 100;
           togglerRef.current.style.left = `${positionPercentage}%`;
         }
@@ -83,7 +93,7 @@ function Player(): JSX.Element {
           <div className="inner two"></div>
           <div className="inner three"></div>
         </div>
-        <button type="button" className="player__exit" onClick={() => navigate(-1)}>Exit</button>
+        <button type="button" className="player__exit" onClick={backToFilmHandler}>Exit</button>
 
         <div className="player__controls">
           <div className="player__controls-row">

@@ -30,7 +30,6 @@ const initialState: FilmStore = {
   promoFilm: emptyFilm,
   similarFilms: [],
   isDataLoading: true,
-  isFilmLoading: true,
   sortedFilms: [],
   genre: AllGENRES,
   favorite: [],
@@ -68,15 +67,10 @@ export const filmStore = createSlice({
       .addCase(fetchSimilarAction.fulfilled, (state, action) => {
         state.similarFilms = action.payload;
       })
-      .addCase(fetchOneFilmAction.pending, (state) => {
-        state.film = emptyFilm;
-        state.isFilmLoading = true;
-      })
       .addCase(fetchOneFilmAction.fulfilled, (state, action) => {
         if (action.payload) {
           state.film = action.payload;
         }
-        state.isFilmLoading = false;
       })
       .addCase(fetchPromoAction.pending, (state) => {
         state.isDataLoading = true;
@@ -89,9 +83,9 @@ export const filmStore = createSlice({
         state.favorite = action.payload;
       })
       .addCase(postIsFavoriteAction.fulfilled, (state, action) => {
-        state.film = action.payload.data;
-        if (action.payload.isPromo) {
-          state.promoFilm = action.payload.data;
+        state.film = action.payload;
+        if (state.film.id === state.promoFilm.id) {
+          state.promoFilm = action.payload;
         }
       });
   }

@@ -9,7 +9,6 @@ import { generatePath } from 'react-router-dom';
 import { Comments } from '../types/comment';
 import { CommentData } from '../types/comment-data';
 import { IsFavoriteData } from '../types/is-favorite-data';
-import { IsFavoriteAction } from '../types/is-favorite-action';
 import { redirectToRoute } from './action';
 
 export const fetchFilmsAction = createAsyncThunk<Films, undefined, {
@@ -49,7 +48,9 @@ export const fetchOneFilmAction = createAsyncThunk<Film | void, string | undefin
         data = response.data;
       })
       .catch((reason: AxiosError) => {
-        dispatch(redirectToRoute(AppRoute.NotFound));
+        if (reason.response?.status === 404) {
+          dispatch(redirectToRoute(AppRoute.NotFound));
+        }
       });
     return data;
   },
@@ -79,15 +80,15 @@ export const fetchFavoriteAction = createAsyncThunk<Films, undefined, {
   },
 );
 
-export const postIsFavoriteAction = createAsyncThunk<IsFavoriteAction, IsFavoriteData, {
+export const postIsFavoriteAction = createAsyncThunk<Film, IsFavoriteData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'filmData/postIsFavorite',
-  async ({ id, status, isPromo }, { dispatch, extra: api }) => {
+  async ({ id, status }, { dispatch, extra: api }) => {
     const { data } = await api.post<Film>(generatePath(APIRoute.StatusFavorite, { filmId: String(id), status: String(status) }));
-    return { data, isPromo };
+    return data;
   },
 );
 
@@ -116,7 +117,9 @@ export const loginAction = createAsyncThunk<UserData | void, AuthData, {
         data = response.data;
       })
       .catch((reason: AxiosError) => {
-        dispatch(redirectToRoute(AppRoute.SignIn));
+        if (reason.response?.status === 400) {
+          dispatch(redirectToRoute(AppRoute.SignIn));
+        }
       });
     return data;
   },

@@ -6,7 +6,6 @@ export type FilmStore = {
   similarFilms: Films,
   promoFilm: Film,
   isDataLoading: boolean,
-  isFilmLoading: boolean,
   sortedFilms: Films,
   genre: string,
   favorite: Films
