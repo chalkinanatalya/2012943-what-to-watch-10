@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logoutAction } from '../../store/api-actions';
+import { resetFavorite } from '../../store/film-store/film-store';
 import { getAuthorizationStatus, getAvatar } from '../../store/user-store/selector';
 
 function LogSignBar(): JSX.Element {
@@ -9,6 +10,11 @@ function LogSignBar(): JSX.Element {
   const avatar = useAppSelector(getAvatar);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const handleLogout = (): void => {
+    dispatch(resetFavorite());
+    dispatch(logoutAction());
+  };
 
   if (authorizationStatus === AuthorizationStatus.Auth) {
     return (
@@ -19,7 +25,7 @@ function LogSignBar(): JSX.Element {
           </div>
         </li>
         <li className="user-block__item">
-          <div className="user-block__link" onClick={() => dispatch(logoutAction())}>Sign out</div>
+          <div className="user-block__link" onClick={handleLogout}>Sign out</div>
         </li>
       </>
     );

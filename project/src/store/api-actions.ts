@@ -1,4 +1,4 @@
-import { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AppDispatch, State } from '../types/state';
 import { Film, Films } from '../types/film';
@@ -42,15 +42,8 @@ export const fetchOneFilmAction = createAsyncThunk<Film, string | undefined, {
 }>(
   'data/fetchOneFilm',
   async (filmId, { dispatch, extra: api }) => {
-    try {
-      const response = await api.get<Film>(generatePath(APIRoute.Film, { filmId: filmId }));
-      return response.data;
-    } catch (err) {
-      if (String(err).includes('404')) {
-        dispatch(redirectToRoute(AppRoute.NotFound));
-      }
-      throw err;
-    }
+    const { data } = await api.get<Film>(generatePath(APIRoute.Film, { filmId: filmId }));
+    return data;
   },
 );
 
@@ -102,23 +95,14 @@ export const checkAuthAction = createAsyncThunk<UserData, undefined, {
   },
 );
 
-export const loginAction = createAsyncThunk<UserData | void, AuthData, {
+export const loginAction = createAsyncThunk<UserData, AuthData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'user/login',
   async ({ login: email, password }, { dispatch, extra: api }) => {
-    let data;
-    await api.post<UserData>(APIRoute.Login, { email, password })
-      .then((response: AxiosResponse) => {
-        data = response.data;
-      })
-      .catch((reason: AxiosError) => {
-        if (reason.response?.status === 400) {
-          dispatch(redirectToRoute(AppRoute.SignIn));
-        }
-      });
+    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
     return data;
   },
 );

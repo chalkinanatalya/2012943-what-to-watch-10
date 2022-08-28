@@ -38,7 +38,7 @@ function FormComment(): JSX.Element {
         buttonRef.current.disabled = true;
       }
     }
-  });
+  }, [form.rating, form.reviewText.length]);
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();

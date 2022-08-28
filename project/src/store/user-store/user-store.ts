@@ -29,14 +29,13 @@ export const userStore = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
-        if (action.payload) {
-          saveToken(action.payload.token);
-          state.avatar = action.payload.avatarUrl;
-          state.loginError = '';
-          state.authorizationStatus = AuthorizationStatus.Auth;
-        } else {
-          state.loginError = 'Please enter a valid email address';
-        }
+        saveToken(action.payload.token);
+        state.avatar = action.payload.avatarUrl;
+        state.loginError = '';
+        state.authorizationStatus = AuthorizationStatus.Auth;
+      })
+      .addCase(loginAction.rejected, (state, action) => {
+        state.loginError = 'Please enter a valid email address';
       })
       .addCase(logoutAction.fulfilled, (state, action) => {
         dropToken();

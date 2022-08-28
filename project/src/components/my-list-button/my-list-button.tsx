@@ -36,7 +36,7 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
   }, [authorizationStatus, film]);
 
   return (
-    <button className="btn btn--list film-card__button" type="button" onClick={() => handleAddToFavorite}>
+    <button className="btn btn--list film-card__button" type="button" onClick={handleAddToFavorite}>
       <svg viewBox="0 0 19 20" width="19" height="20">
         {selectedFilm.isFavorite && authorizationStatus === AuthorizationStatus.Auth ? <use xlinkHref="#in-list"></use> : <use xlinkHref="#add"></use>}
       </svg>

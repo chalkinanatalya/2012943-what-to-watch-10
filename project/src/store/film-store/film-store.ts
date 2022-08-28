@@ -31,6 +31,11 @@ export const filmStore = createSlice({
         state.sortedFilms = state.films.filter((film) => film.genre === state.genre);
       }
     },
+    resetFavorite: (state) => {
+      state.favorite = [];
+      state.film.isFavorite = false;
+      state.promoFilm.isFavorite = false;
+    },
   },
   extraReducers(builder) {
     builder
@@ -70,4 +75,4 @@ export const filmStore = createSlice({
   }
 });
 
-export const { selectGenre, getSortedFilmsList } = filmStore.actions;
+export const { selectGenre, getSortedFilmsList, resetFavorite } = filmStore.actions;

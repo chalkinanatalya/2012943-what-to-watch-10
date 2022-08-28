@@ -1,10 +1,11 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AppRoute } from '../const';
 import { getToken } from './token';
 
 const BASE_URL = 'https://10.react.pages.academy/wtw';
 const REQUEST_TIMEOUT = 5000;
 
-export const createAPI = (): AxiosInstance => {
+export const createAPI = (callback: (path: string) => void): AxiosInstance => {
   const api = axios.create({
     baseURL: BASE_URL,
     timeout: REQUEST_TIMEOUT,
@@ -22,12 +23,15 @@ export const createAPI = (): AxiosInstance => {
     }
   );
 
-  axios.interceptors.response.use(
+  api.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
-      // eslint-disable-next-line no-console
-      console.log('1');
-      return Promise.reject(error);
+      if (error.response?.status === 404) {
+        callback(AppRoute.NotFound);
+      } else if (error.response?.status === 400) {
+        callback(AppRoute.SignIn);
+      }
+      throw error;
     });
 
   return api;
