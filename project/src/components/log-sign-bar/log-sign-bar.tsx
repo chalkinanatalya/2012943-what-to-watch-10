@@ -11,7 +11,7 @@ function LogSignBar(): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = (): void => {
+  const handleStartLogout = (): void => {
     dispatch(resetFavorite());
     dispatch(logoutAction());
   };
@@ -25,7 +25,7 @@ function LogSignBar(): JSX.Element {
           </div>
         </li>
         <li className="user-block__item">
-          <div className="user-block__link" onClick={handleLogout}>Sign out</div>
+          <div className="user-block__link" onClick={handleStartLogout}>Sign out</div>
         </li>
       </>
     );
