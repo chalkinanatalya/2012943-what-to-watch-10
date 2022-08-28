@@ -9,6 +9,8 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { fetchOneFilmAction } from '../../store/api-actions';
+import { getFilm } from '../../store/film-store/selector';
+import { getAuthorizationStatus } from '../../store/user-store/selector';
 import LoadingScreen from '../loading-screen/loading-screen';
 
 
@@ -21,15 +23,17 @@ const addReviewButton = (authorizationStatus: string, id: string | undefined): J
 };
 
 function FilmInfo(): JSX.Element {
-
   const { id } = useParams();
+  const film = useAppSelector(getFilm);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   useEffect(() => {
-    store.dispatch(fetchOneFilmAction(id));
+    if (film.id !== Number(id)) {
+      store.dispatch(fetchOneFilmAction(id));
+    }
   }, [id]);
 
-  const { film, authorizationStatus, isFilmLoading } = useAppSelector((state) => state);
-  if (isFilmLoading) {
+  if (film.id !== Number(id)) {
     return (
       <LoadingScreen />
     );
@@ -59,7 +63,7 @@ function FilmInfo(): JSX.Element {
               </p>
 
               <div className="film-card__buttons">
-                <Link to={generatePath(AppRoute.Player, { id: id })} className="btn btn--play film-card__button">
+                <Link to={generatePath(AppRoute.Player, { id: id, filmType: 'film' })} className="btn btn--play film-card__button">
                   <svg viewBox="0 0 19 19" width="19" height="19">
                     <use xlinkHref="#play-s"></use>
                   </svg>

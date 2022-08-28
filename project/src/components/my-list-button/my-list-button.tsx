@@ -1,30 +1,47 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
+import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
+import { redirectToRoute } from '../../store/action';
 import { fetchFavoriteAction, postIsFavoriteAction } from '../../store/api-actions';
+import { getFavorite, getFilm, getPromoFilm } from '../../store/film-store/selector';
+import { getAuthorizationStatus } from '../../store/user-store/selector';
+import { Film } from '../../types/film';
 
 type MyListButtonProps = {
   filmType: string
 }
 
 function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
-  const { film, promoFilm, favorite } = useAppSelector((state) => state);
+  const film = useAppSelector(getFilm);
+  const promoFilm = useAppSelector(getPromoFilm);
+  const favorite = useAppSelector(getFavorite);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+
+  const selectedFilm: Film = filmType === 'film' ? film : promoFilm;
   const dispatch = useAppDispatch();
-  const id = filmType === 'film' ? film.id : promoFilm.id;
-  const status = filmType === 'film' ? Number(!film.isFavorite) : Number(!promoFilm.isFavorite);
-  const isPromo = filmType === 'promo';
+
+  const addToFavoriteHandler = () => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(postIsFavoriteAction({ id: selectedFilm.id, status: Number(!selectedFilm.isFavorite) }));
+    } else {
+      dispatch(redirectToRoute(AppRoute.SignIn));
+    }
+  };
 
   useEffect(() => {
-    store.dispatch(fetchFavoriteAction());
-  }, [film]);
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      store.dispatch(fetchFavoriteAction());
+    }
+  }, [authorizationStatus, film]);
 
   return (
-    <button className="btn btn--list film-card__button" type="button" onClick={() => dispatch(postIsFavoriteAction({ id: id, status: status, isPromo: isPromo }))}>
+    <button className="btn btn--list film-card__button" type="button" onClick={() => addToFavoriteHandler()}>
       <svg viewBox="0 0 19 20" width="19" height="20">
-        {film.isFavorite ? <use xlinkHref="#in-list"></use> : <use xlinkHref="#add"></use>}
+        {selectedFilm.isFavorite && authorizationStatus === AuthorizationStatus.Auth ? <use xlinkHref="#in-list"></use> : <use xlinkHref="#add"></use>}
       </svg>
       <span>My list</span>
-      <span className="film-card__count">{favorite.length}</span>
+      {authorizationStatus === AuthorizationStatus.Auth ? <span className="film-card__count">{favorite.length}</span> : ''}
     </button>
   );
 }
@@ -32,4 +49,5 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
 MyListButton.defaultProps = {
   filmType: 'film',
 };
-export default MyListButton;
+
+export default memo(MyListButton);

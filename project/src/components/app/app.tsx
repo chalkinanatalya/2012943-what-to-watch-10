@@ -9,13 +9,18 @@ import MyList from '../../pages/my-list/my-list';
 import Player from '../../pages/player/player';
 import AddReview from '../../pages/review/review';
 import SignIn from '../../pages/sign-in/sign-in';
+import { getIsDataLoading, getSortedFilms } from '../../store/film-store/selector';
+import { getAuthorizationStatus } from '../../store/user-store/selector';
 import HistoryRouter from '../history-route/history-route';
 import NotFound from '../not-found/not-found';
 import PrivateRoute from '../private-route/private-route';
 import PublicRoute from '../public-route/public-route';
 
 function App(): JSX.Element {
-  const { authorizationStatus, sortedFilms, isDataLoading } = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const sortedFilms = useAppSelector(getSortedFilms);
+  const isDataLoading = useAppSelector(getIsDataLoading);
+
 
   if (authorizationStatus === AuthorizationStatus.Unknown || isDataLoading) {
     return (

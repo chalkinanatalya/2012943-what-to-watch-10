@@ -2,6 +2,7 @@ import { generatePath, Link } from 'react-router-dom';
 import Logo from '../../components/logo/logo';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
+import { getFavorite, getFilm } from '../../store/film-store/selector';
 import { Film } from '../../types/film';
 import LogSignBar from '../log-sign-bar/log-sign-bar';
 
@@ -9,14 +10,18 @@ type HeaderProps = {
   page: string;
 }
 
-const headerClass = (page: string): string | undefined => {
+const headerClass = (page: string): string => {
   switch (page) {
     case 'My list':
+      return 'page-header user-page__head';
+    case 'Sign in':
       return 'page-header user-page__head';
     case 'Add review':
       return 'page-header';
     case 'Main':
       return 'page-header film-card__head';
+    default:
+      return '';
   }
 };
 
@@ -24,6 +29,8 @@ const extraInfo = (page: string, film: Film, length: number): JSX.Element | unde
   switch (page) {
     case 'My list':
       return <h1 className="page-title user-page__title">My list <span className="user-page__film-count">{length}</span></h1>;
+    case 'Sign in':
+      return <h1 className="page-title user-page__title">Sign in</h1>;
     case 'Add review':
       return (
         <nav className="breadcrumbs">
@@ -41,7 +48,8 @@ const extraInfo = (page: string, film: Film, length: number): JSX.Element | unde
 };
 
 function Header({ page }: HeaderProps): JSX.Element {
-  const { favorite, film } = useAppSelector((state) => state);
+  const favorite = useAppSelector(getFavorite);
+  const film = useAppSelector(getFilm);
 
   return (
     <header className={headerClass(page)}>
@@ -49,9 +57,7 @@ function Header({ page }: HeaderProps): JSX.Element {
         <Logo />
       </div>
       {extraInfo(page, film, favorite.length)}
-      <ul className="user-block">
-        <LogSignBar />
-      </ul>
+      {page === 'Sign in' ? '' : <ul className="user-block"> <LogSignBar /></ul>}
     </header>
   );
 }

@@ -6,11 +6,12 @@ import { useEffect } from 'react';
 import { fetchOneFilmAction } from '../../store/api-actions';
 import { store } from '../../store';
 import Header from '../../components/header/header';
+import { getFilm } from '../../store/film-store/selector';
 
 
 function AddReview(): JSX.Element {
   const { id } = useParams();
-  const { film } = useAppSelector((state) => state);
+  const film = useAppSelector(getFilm);
 
   useEffect(() => {
     if (Number(id) !== film.id) {

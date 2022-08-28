@@ -1,18 +1,21 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import FilmList from '../film-list/film-list';
-import { selectGenre, getSortedFilmsList } from '../../store/action';
+import { selectGenre, getSortedFilmsList } from '../../store/film-store/film-store';
 import { MouseEvent, useState } from 'react';
-import ShowButton from '../show-button/show-button';
+import ShowButton from '../header/show-button/show-button';
 import { FILMS_AMOUNT } from '../../const';
+import { getFilms, getGenre, getSortedFilms } from '../../store/film-store/selector';
 
 function GenresList(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [filmsToShow, setFilmsToShow] = useState(FILMS_AMOUNT);
 
-  const { films, genre, sortedFilms } = useAppSelector((state) => state);
+  const films = useAppSelector(getFilms);
+  const genre = useAppSelector(getGenre);
+  const sortedFilms = useAppSelector(getSortedFilms);
 
-  const changeGenre = (evt: MouseEvent<HTMLAnchorElement>) => {
+  const changeGenreHandler = (evt: MouseEvent<HTMLAnchorElement>) => {
     setFilmsToShow(FILMS_AMOUNT);
     dispatch(selectGenre({ genre: evt.currentTarget.id }));
     dispatch(getSortedFilmsList());
@@ -30,7 +33,7 @@ function GenresList(): JSX.Element {
       <h2 className="catalog__title visually-hidden">Catalog</h2>
 
       <ul className="catalog__genres-list">
-        {genres.map((tabGenre) => (<li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}> <a href="#" className="catalog__genres-link" id={tabGenre} onClick={changeGenre}>{tabGenre}</a> </li>))}
+        {genres.map((tabGenre) => (<li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}> <a href="#" className="catalog__genres-link" id={tabGenre} onClick={changeGenreHandler}>{tabGenre}</a> </li>))}
       </ul>
       <FilmList films={sortedFilms.slice(0, filmsToShow)} />
       {sortedFilms.length > filmsToShow ? <div className="catalog__more"> <ShowButton onShowMore={showMoreHandler} /> </div> : ''}

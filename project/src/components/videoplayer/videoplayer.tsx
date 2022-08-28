@@ -1,7 +1,5 @@
-/* eslint-disable no-console */
 import { useEffect, useRef } from 'react';
 import { Film } from '../../types/film';
-import './videoplayer.css';
 
 type VideoPlayerProps = {
   film: Film,

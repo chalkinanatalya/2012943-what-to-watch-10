@@ -1,7 +1,8 @@
 import { FormEvent, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setLoginError } from '../../store/action';
 import { loginAction } from '../../store/api-actions';
+import { getLoginError } from '../../store/user-store/selector';
+import { setLoginError } from '../../store/user-store/user-store';
 import { AuthData } from '../../types/auth-data';
 
 const setErrorMarkup = (loginError: string) => {
@@ -18,7 +19,7 @@ const setErrorMarkup = (loginError: string) => {
 
 function FormLogin(): JSX.Element {
   const dispatch = useAppDispatch();
-  const { loginError } = useAppSelector((state) => state);
+  const loginError = useAppSelector(getLoginError);
 
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
