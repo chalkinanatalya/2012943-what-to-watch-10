@@ -1,28 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AllGENRES, NameSpace } from '../../const';
-import { Film } from '../../types/film';
 import { FilmStore } from '../../types/film-store';
-import { fetchFavoriteAction, fetchFilmsAction, fetchOneFilmAction, fetchPromoAction, fetchSimilarAction, postIsFavoriteAction } from '../api-actions';
+import { fetchFavoriteAction, fetchFilmsAction, fetchOneFilmAction, fetchPromoAction, fetchSimilarAction, sendIsFavoriteAction } from '../api-actions';
+import { emptyFilm } from './film-store-const';
 
-export const emptyFilm: Film = {
-  id: -1,
-  name: '',
-  posterImage: '',
-  previewImage: '',
-  backgroundImage: '',
-  backgroundColor: '',
-  videoLink: '',
-  previewVideoLink: '',
-  description: '',
-  rating: -1,
-  scoresCount: -1,
-  director: '',
-  starring: [],
-  runTime: -1,
-  genre: '',
-  released: -1,
-  isFavorite: false,
-};
 
 const initialState: FilmStore = {
   films: [],
@@ -68,9 +49,7 @@ export const filmStore = createSlice({
         state.similarFilms = action.payload;
       })
       .addCase(fetchOneFilmAction.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.film = action.payload;
-        }
+        state.film = action.payload;
       })
       .addCase(fetchPromoAction.pending, (state) => {
         state.isDataLoading = true;
@@ -82,7 +61,7 @@ export const filmStore = createSlice({
       .addCase(fetchFavoriteAction.fulfilled, (state, action) => {
         state.favorite = action.payload;
       })
-      .addCase(postIsFavoriteAction.fulfilled, (state, action) => {
+      .addCase(sendIsFavoriteAction.fulfilled, (state, action) => {
         state.film = action.payload;
         if (state.film.id === state.promoFilm.id) {
           state.promoFilm = action.payload;

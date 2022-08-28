@@ -1,3 +1,4 @@
+
 export enum AppRoute {
   Main = '/',
   SignIn = '/login',
@@ -35,3 +36,4 @@ export enum NameSpace {
 export const AllGENRES = 'All genres';
 
 export const FILMS_AMOUNT = 8;
+

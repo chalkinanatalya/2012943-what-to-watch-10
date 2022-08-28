@@ -44,7 +44,7 @@ function Player(): JSX.Element {
     }
   };
 
-  const backToFilmHandler = (): void => {
+  const handleBackToFilm = (): void => {
     if (filmType === 'film') {
       dispatch(redirectToRoute(generatePath(AppRoute.Film, { id: id })));
     } else if (filmType === 'promo') {
@@ -93,7 +93,7 @@ function Player(): JSX.Element {
           <div className="inner two"></div>
           <div className="inner three"></div>
         </div>
-        <button type="button" className="player__exit" onClick={backToFilmHandler}>Exit</button>
+        <button type="button" className="player__exit" onClick={handleBackToFilm}>Exit</button>
 
         <div className="player__controls">
           <div className="player__controls-row">

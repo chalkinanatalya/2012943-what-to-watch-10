@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { postCommentAction } from '../../store/api-actions';
+import { sendCommentAction } from '../../store/api-actions';
 import { getCommentError } from '../../store/comment-store/selector';
 import './form-comment.css';
 
@@ -40,12 +40,12 @@ function FormComment(): JSX.Element {
     }
   });
 
-  const submitHandler = (evt: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
-    dispatch(postCommentAction({ id: Number(form.id), comment: form.reviewText, rating: Number(form.rating) }));
+    dispatch(sendCommentAction({ id: Number(form.id), comment: form.reviewText, rating: Number(form.rating) }));
   };
 
-  const formChangeHandler = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
+  const handleFormChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
     if (buttonRef.current !== null) {
       const { name, value } = evt.currentTarget;
       setForm({ ...form, [name]: value });
@@ -54,7 +54,7 @@ function FormComment(): JSX.Element {
 
   const createField = (counter: number): JSX.Element => (
     <Fragment key={counter}>
-      <input className="rating__input" id={`star-${counter}`} type="radio" name="rating" value={`${11 - counter}`} onChange={formChangeHandler} />
+      <input className="rating__input" id={`star-${counter}`} type="radio" name="rating" value={`${11 - counter}`} onChange={handleFormChange} />
       <label className="rating__label" htmlFor={`star-${counter}`}>Rating {counter}</label>
     </Fragment>
   );
@@ -65,7 +65,7 @@ function FormComment(): JSX.Element {
   };
 
   return (
-    <form action="#" className="add-review__form" onSubmit={submitHandler}>
+    <form action="#" className="add-review__form" onSubmit={handleSubmit}>
       <div className="rating">
         <div className="rating__stars">
           {createRatingStars()}
@@ -73,7 +73,7 @@ function FormComment(): JSX.Element {
       </div>
 
       <div className="add-review__text">
-        <textarea className="add-review__textarea" name="reviewText" id="review-text" placeholder="Review text" value={form.reviewText} onChange={formChangeHandler}></textarea>
+        <textarea className="add-review__textarea" name="reviewText" id="review-text" placeholder="Review text" value={form.reviewText} onChange={handleFormChange}></textarea>
         <div className="add-review__submit">
           <button className="add-review__btn" type="submit" ref={buttonRef} disabled>Post</button>
         </div>

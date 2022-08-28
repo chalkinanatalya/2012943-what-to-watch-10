@@ -35,24 +35,22 @@ export const fetchSimilarAction = createAsyncThunk<Films, string | undefined, {
   },
 );
 
-export const fetchOneFilmAction = createAsyncThunk<Film | void, string | undefined, {
+export const fetchOneFilmAction = createAsyncThunk<Film, string | undefined, {
   dispatch: AppDispatch,
   state: State,
-  extra: AxiosInstance
+  extra: AxiosInstance,
 }>(
   'data/fetchOneFilm',
   async (filmId, { dispatch, extra: api }) => {
-    let data;
-    await api.get<Film>(generatePath(APIRoute.Film, { filmId: filmId }))
-      .then((response: AxiosResponse) => {
-        data = response.data;
-      })
-      .catch((reason: AxiosError) => {
-        if (reason.response?.status === 404) {
-          dispatch(redirectToRoute(AppRoute.NotFound));
-        }
-      });
-    return data;
+    try {
+      const response = await api.get<Film>(generatePath(APIRoute.Film, { filmId: filmId }));
+      return response.data;
+    } catch (err) {
+      if (String(err).includes('404')) {
+        dispatch(redirectToRoute(AppRoute.NotFound));
+      }
+      throw err;
+    }
   },
 );
 
@@ -80,7 +78,7 @@ export const fetchFavoriteAction = createAsyncThunk<Films, undefined, {
   },
 );
 
-export const postIsFavoriteAction = createAsyncThunk<Film, IsFavoriteData, {
+export const sendIsFavoriteAction = createAsyncThunk<Film, IsFavoriteData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
@@ -149,7 +147,7 @@ export const fetchCommentsAction = createAsyncThunk<Comments, string | undefined
   },
 );
 
-export const postCommentAction = createAsyncThunk<void, CommentData, {
+export const sendCommentAction = createAsyncThunk<void, CommentData, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance

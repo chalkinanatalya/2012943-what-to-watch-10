@@ -4,7 +4,7 @@ type OverviewProps = {
   film: Film,
 };
 
-const countRatingLevel = (rating: number): string => {
+const getRatingLevel = (rating: number): string => {
   if (rating < 3) {
     return 'Bad';
   } else if (rating >= 3 && rating < 5) {
@@ -25,7 +25,7 @@ function Overview({ film }: OverviewProps): JSX.Element {
       <div className="film-rating">
         <div className="film-rating__score">{film.rating}</div>
         <p className="film-rating__meta">
-          <span className="film-rating__level">{countRatingLevel(film.rating)}</span>
+          <span className="film-rating__level">{getRatingLevel(film.rating)}</span>
           <span className="film-rating__count">{film.scoresCount} ratings</span>
         </p>
       </div>

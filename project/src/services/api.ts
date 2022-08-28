@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { getToken } from './token';
 
 const BASE_URL = 'https://10.react.pages.academy/wtw';
@@ -21,6 +21,14 @@ export const createAPI = (): AxiosInstance => {
       return config;
     }
   );
+
+  axios.interceptors.response.use(
+    (response: AxiosResponse) => response,
+    (error: AxiosError) => {
+      // eslint-disable-next-line no-console
+      console.log('1');
+      return Promise.reject(error);
+    });
 
   return api;
 };

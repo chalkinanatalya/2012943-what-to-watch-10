@@ -10,7 +10,7 @@ type HeaderProps = {
   page: string;
 }
 
-const headerClass = (page: string): string => {
+const addHeaderClass = (page: string): string => {
   switch (page) {
     case 'My list':
       return 'page-header user-page__head';
@@ -25,7 +25,7 @@ const headerClass = (page: string): string => {
   }
 };
 
-const extraInfo = (page: string, film: Film, length: number): JSX.Element | undefined => {
+const showExtraInfo = (page: string, film: Film, length: number): JSX.Element | undefined => {
   switch (page) {
     case 'My list':
       return <h1 className="page-title user-page__title">My list <span className="user-page__film-count">{length}</span></h1>;
@@ -52,11 +52,11 @@ function Header({ page }: HeaderProps): JSX.Element {
   const film = useAppSelector(getFilm);
 
   return (
-    <header className={headerClass(page)}>
+    <header className={addHeaderClass(page)}>
       <div className="logo">
         <Logo />
       </div>
-      {extraInfo(page, film, favorite.length)}
+      {showExtraInfo(page, film, favorite.length)}
       {page === 'Sign in' ? '' : <ul className="user-block"> <LogSignBar /></ul>}
     </header>
   );

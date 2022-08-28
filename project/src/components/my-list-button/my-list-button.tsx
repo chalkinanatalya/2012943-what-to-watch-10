@@ -3,7 +3,7 @@ import { AppRoute, AuthorizationStatus } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { store } from '../../store';
 import { redirectToRoute } from '../../store/action';
-import { fetchFavoriteAction, postIsFavoriteAction } from '../../store/api-actions';
+import { fetchFavoriteAction, sendIsFavoriteAction } from '../../store/api-actions';
 import { getFavorite, getFilm, getPromoFilm } from '../../store/film-store/selector';
 import { getAuthorizationStatus } from '../../store/user-store/selector';
 import { Film } from '../../types/film';
@@ -21,9 +21,9 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
   const selectedFilm: Film = filmType === 'film' ? film : promoFilm;
   const dispatch = useAppDispatch();
 
-  const addToFavoriteHandler = () => {
+  const handleAddToFavorite = () => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
-      dispatch(postIsFavoriteAction({ id: selectedFilm.id, status: Number(!selectedFilm.isFavorite) }));
+      dispatch(sendIsFavoriteAction({ id: selectedFilm.id, status: Number(!selectedFilm.isFavorite) }));
     } else {
       dispatch(redirectToRoute(AppRoute.SignIn));
     }
@@ -36,7 +36,7 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
   }, [authorizationStatus, film]);
 
   return (
-    <button className="btn btn--list film-card__button" type="button" onClick={() => addToFavoriteHandler()}>
+    <button className="btn btn--list film-card__button" type="button" onClick={() => handleAddToFavorite}>
       <svg viewBox="0 0 19 20" width="19" height="20">
         {selectedFilm.isFavorite && authorizationStatus === AuthorizationStatus.Auth ? <use xlinkHref="#in-list"></use> : <use xlinkHref="#add"></use>}
       </svg>
