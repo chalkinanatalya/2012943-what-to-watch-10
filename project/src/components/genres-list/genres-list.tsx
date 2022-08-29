@@ -15,7 +15,7 @@ function GenresList(): JSX.Element {
   const genre = useAppSelector(getGenre);
   const sortedFilms = useAppSelector(getSortedFilms);
 
-  const handleChangeGenre = (evt: MouseEvent<HTMLAnchorElement>): void => {
+  const handleChangeGenre = (evt: MouseEvent<HTMLDivElement>): void => {
     setFilmsToShow(FILMS_AMOUNT);
     dispatch(selectGenre({ genre: evt.currentTarget.id }));
     dispatch(getSortedFilmsList());
@@ -28,7 +28,7 @@ function GenresList(): JSX.Element {
   const handleGenreList = (): JSX.Element[] => {
     const markup = genres.map((tabGenre) => (
       <li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}>
-        <div className="catalog__genres-link" id={tabGenre} onClick={() => handleChangeGenre}>{tabGenre}</div>
+        <div className="catalog__genres-link" id={tabGenre} onClick={handleChangeGenre}>{tabGenre}</div>
       </li>
     ));
     return markup;
@@ -39,6 +39,7 @@ function GenresList(): JSX.Element {
   return (
     <section className="catalog">
       <h2 className="catalog__title visually-hidden">Catalog</h2>
+
       <ul className="catalog__genres-list">
         {handleGenreList()}
       </ul>
