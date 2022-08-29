@@ -526,6 +526,7 @@ main {
     margin-right: 0; }
 
 .catalog__genres-link {
+  cursor: pointer;
   display: block;
   color: #DFCF77;
   text-decoration: none;
@@ -1318,6 +1319,7 @@ main {
        object-fit: cover; }
 
 .small-film-card__image {
+  cursor: pointer;
   position: relative;
   z-index: 1;
   height: 175px; }

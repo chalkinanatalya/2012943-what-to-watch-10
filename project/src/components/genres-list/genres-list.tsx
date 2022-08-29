@@ -25,15 +25,22 @@ function GenresList(): JSX.Element {
     setFilmsToShow(sortedFilms.length - filmsToShow >= FILMS_AMOUNT ? filmsToShow + FILMS_AMOUNT : sortedFilms.length);
   };
 
+  const handleGenreList = (): JSX.Element[] => {
+    const markup = genres.map((tabGenre) => (
+      <li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}>
+        <div className="catalog__genres-link" id={tabGenre} onClick={() => handleChangeGenre}>{tabGenre}</div>
+      </li>
+    ));
+    return markup;
+  };
 
   const genres = ['All genres', ...new Set(films.map((film) => film.genre))];
 
   return (
     <section className="catalog">
       <h2 className="catalog__title visually-hidden">Catalog</h2>
-
       <ul className="catalog__genres-list">
-        {genres.map((tabGenre) => (<li key={tabGenre} className={`catalog__genres-item  ${genre === tabGenre ? 'catalog__genres-item--active' : ''}`}> <a href="#" className="catalog__genres-link" id={tabGenre} onClick={handleChangeGenre}>{tabGenre}</a> </li>))}
+        {handleGenreList()}
       </ul>
       <FilmList films={sortedFilms.slice(0, filmsToShow)} />
       {sortedFilms.length > filmsToShow ? <div className="catalog__more"> <ShowButton onShowMore={handleShowMore} /> </div> : ''}
