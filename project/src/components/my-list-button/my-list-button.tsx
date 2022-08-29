@@ -21,7 +21,7 @@ function MyListButton({ filmType }: MyListButtonProps): JSX.Element {
   const selectedFilm: Film = filmType === 'film' ? film : promoFilm;
   const dispatch = useAppDispatch();
 
-  const handleAddToFavorite = () => {
+  const handleAddToFavorite = (): void => {
     if (authorizationStatus === AuthorizationStatus.Auth) {
       dispatch(sendIsFavoriteAction({ id: selectedFilm.id, status: Number(!selectedFilm.isFavorite) }));
     } else {

@@ -6,7 +6,7 @@ import { memo, useEffect } from 'react';
 import { getSimilarFilms } from '../../store/film-store/selector';
 
 type SimilarFilmsProps = {
-  filmId: string | undefined,
+  filmId?: string,
 }
 
 function SimilarFilms({ filmId }: SimilarFilmsProps): JSX.Element {

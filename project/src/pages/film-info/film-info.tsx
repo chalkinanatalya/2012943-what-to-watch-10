@@ -31,7 +31,7 @@ function FilmInfo(): JSX.Element {
     if (film.id !== Number(id)) {
       store.dispatch(fetchOneFilmAction(id));
     }
-  }, [id]);
+  });
 
   if (film.id !== Number(id)) {
     return (

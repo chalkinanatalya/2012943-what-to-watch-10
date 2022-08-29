@@ -101,7 +101,7 @@ function Player(): JSX.Element {
               <progress className="player__progress" value="0" max="100" ref={progressRef}></progress>
               <div className="player__toggler" style={{ left: '0' }} ref={togglerRef} >Toggler</div>
             </div>
-            <div className="player__time-value" ref={timerRef}>{formatTime(selectedFilm.runTime * 60)}</div>
+            <div className="player__time-value" ref={timerRef}>{videoRef.current ? formatTime(videoRef.current.duration) : ''}</div>
           </div>
 
           <div className="player__controls-row">

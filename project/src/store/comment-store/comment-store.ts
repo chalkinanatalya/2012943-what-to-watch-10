@@ -20,10 +20,10 @@ export const commentStore = createSlice({
       .addCase(fetchCommentsAction.fulfilled, (state, action) => {
         state.comments = action.payload;
       })
-      .addCase(sendCommentAction.fulfilled, (state, action) => {
+      .addCase(sendCommentAction.fulfilled, (state) => {
         state.commentError = '';
       })
-      .addCase(sendCommentAction.rejected, (state, action) => {
+      .addCase(sendCommentAction.rejected, (state) => {
         state.commentError = 'Something went wrong, try again later';
       });
   }

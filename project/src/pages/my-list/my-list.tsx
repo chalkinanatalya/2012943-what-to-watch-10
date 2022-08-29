@@ -3,13 +3,8 @@ import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import { useAppSelector } from '../../hooks';
 import { getFavorite } from '../../store/film-store/selector';
-import { Films } from '../../types/film';
 
-type MyListProps = {
-  films: Films,
-}
-
-function MyList({ films }: MyListProps): JSX.Element {
+function MyList(): JSX.Element {
   const favorite = useAppSelector(getFavorite);
 
   return (

@@ -15,13 +15,13 @@ function GenresList(): JSX.Element {
   const genre = useAppSelector(getGenre);
   const sortedFilms = useAppSelector(getSortedFilms);
 
-  const handleChangeGenre = (evt: MouseEvent<HTMLAnchorElement>) => {
+  const handleChangeGenre = (evt: MouseEvent<HTMLAnchorElement>): void => {
     setFilmsToShow(FILMS_AMOUNT);
     dispatch(selectGenre({ genre: evt.currentTarget.id }));
     dispatch(getSortedFilmsList());
   };
 
-  const handleShowMore = () => {
+  const handleShowMore = (): void => {
     setFilmsToShow(sortedFilms.length - filmsToShow >= FILMS_AMOUNT ? filmsToShow + FILMS_AMOUNT : sortedFilms.length);
   };
 

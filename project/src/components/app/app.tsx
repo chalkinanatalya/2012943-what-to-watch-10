@@ -9,7 +9,7 @@ import MyList from '../../pages/my-list/my-list';
 import Player from '../../pages/player/player';
 import AddReview from '../../pages/review/review';
 import SignIn from '../../pages/sign-in/sign-in';
-import { getIsDataLoading, getSortedFilms } from '../../store/film-store/selector';
+import { getIsDataLoading } from '../../store/film-store/selector';
 import { getAuthorizationStatus } from '../../store/user-store/selector';
 import HistoryRouter from '../history-route/history-route';
 import NotFound from '../not-found/not-found';
@@ -18,7 +18,6 @@ import PublicRoute from '../public-route/public-route';
 
 function App(): JSX.Element {
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const sortedFilms = useAppSelector(getSortedFilms);
   const isDataLoading = useAppSelector(getIsDataLoading);
 
 
@@ -45,7 +44,7 @@ function App(): JSX.Element {
 
         <Route path={AppRoute.MyList} element={
           <PrivateRoute authorizationStatus={authorizationStatus}>
-            <MyList films={sortedFilms} />
+            <MyList />
           </PrivateRoute>
         }
         />
@@ -57,6 +56,7 @@ function App(): JSX.Element {
         }
         />
         <Route path={AppRoute.NotFound} element={<NotFound />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </HistoryRouter>
   );

@@ -13,7 +13,7 @@ type TabsProps = {
 function Tabs({ film }: TabsProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<string>('overview');
 
-  const tab = () => {
+  const tab = (): JSX.Element | null => {
     switch (activeTab) {
       case 'overview':
         return <Overview film={film} />;
@@ -21,6 +21,8 @@ function Tabs({ film }: TabsProps): JSX.Element {
         return <Details film={film} />;
       case 'filmreview':
         return <FilmReview filmId={String(film.id)} />;
+      default:
+        return null;
     }
   };
 

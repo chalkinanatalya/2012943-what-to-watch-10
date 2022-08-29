@@ -25,7 +25,7 @@ export const userStore = createSlice({
         state.avatar = action.payload.avatarUrl;
         state.authorizationStatus = AuthorizationStatus.Auth;
       })
-      .addCase(checkAuthAction.rejected, (state, action) => {
+      .addCase(checkAuthAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
@@ -34,10 +34,10 @@ export const userStore = createSlice({
         state.loginError = '';
         state.authorizationStatus = AuthorizationStatus.Auth;
       })
-      .addCase(loginAction.rejected, (state, action) => {
-        state.loginError = 'Please enter a valid email address';
+      .addCase(loginAction.rejected, (state) => {
+        state.loginError = 'Something went wrong';
       })
-      .addCase(logoutAction.fulfilled, (state, action) => {
+      .addCase(logoutAction.fulfilled, (state) => {
         dropToken();
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       });

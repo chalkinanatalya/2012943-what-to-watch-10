@@ -5,7 +5,7 @@ import { sendCommentAction } from '../../store/api-actions';
 import { getCommentError } from '../../store/comment-store/selector';
 import './form-comment.css';
 
-const getErrorMarkup = (commentError: string) => {
+const getErrorMarkup = (commentError: string): JSX.Element | null => {
   if (commentError !== '') {
     return (
       <div className="comment-error__message">

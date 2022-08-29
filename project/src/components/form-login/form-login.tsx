@@ -5,7 +5,7 @@ import { getLoginError } from '../../store/user-store/selector';
 import { setLoginError } from '../../store/user-store/user-store';
 import { AuthData } from '../../types/auth-data';
 
-const setErrorMarkup = (loginError: string) => {
+const setErrorMarkup = (loginError: string): JSX.Element | null => {
   if (loginError !== '') {
     return (
       <div className="sign-in__message">
@@ -24,14 +24,29 @@ function FormLogin(): JSX.Element {
   const loginRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
-  const onSubmit = (authData: AuthData) => {
+  const onSubmit = (authData: AuthData): void => {
     dispatch(loginAction(authData));
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const signInValidator = (email: string, password: string): string | null => {
+    const isEmailValid = /^\S+@\S+\.\S+$/.test(email);
+    const isPasswordValid = /^(?=^[a-zA-Z0-9]{2,}$)(?=.*\d)(?=.*[a-zA-Z]).*$/.test(password);
+
+    if (!email || !isPasswordValid) {
+      return 'Please enter a valid password';
+    }
+    if (!isEmailValid) {
+      return 'Please enter a valid email address';
+    }
+
+    return null;
+  };
+
+  const handleSubmit = (evt: FormEvent<HTMLFormElement>): void => {
     evt.preventDefault();
     if (loginRef.current !== null && passwordRef.current !== null) {
-      if (passwordRef.current.value !== '' && passwordRef.current.value.indexOf(' ') === -1) {
+      const signInErrorStatus = signInValidator(loginRef.current.value, passwordRef.current.value);
+      if (!signInErrorStatus) {
         onSubmit({
           login: loginRef.current.value,
           password: passwordRef.current.value,
