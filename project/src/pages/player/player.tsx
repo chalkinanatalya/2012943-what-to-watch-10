@@ -29,11 +29,14 @@ function Player(): JSX.Element {
   const timerRef = useRef<HTMLDivElement | null>(null);
 
   const formatTime = (seconds: number): string => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor(seconds / 60);
-    const hoursString = (hours >= 10) ? hours : `0${hours}`;
-    const minutesString = (minutes >= 10) ? minutes - (hours * 60) : `0${minutes}`;
-    const secondsString = (seconds >= 10) ? seconds - (minutes * 60) : `0${seconds}`;
+    const secPerMin = 60;
+    const minPerHour = 60;
+    const minimumTens = 10;
+    const hours = Math.floor(seconds / (secPerMin * minPerHour));
+    const minutes = Math.floor(seconds / secPerMin);
+    const hoursString = (hours >= minimumTens) ? hours : `0${hours}`;
+    const minutesString = (minutes >= minimumTens) ? minutes - (hours * minPerHour) : `0${minutes}`;
+    const secondsString = (seconds >= minimumTens) ? seconds - (minutes * secPerMin) : `0${seconds}`;
 
     return (hours ? `-${hoursString}:${minutesString}:${secondsString}` : `-${minutesString}:${secondsString}`);
   };

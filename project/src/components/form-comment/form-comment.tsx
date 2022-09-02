@@ -31,8 +31,10 @@ function FormComment(): JSX.Element {
   });
 
   useEffect(() => {
+    const minSymbols = 50;
+    const maxSymbols = 400;
     if (buttonRef.current) {
-      if (form.reviewText.length >= 50 && form.reviewText.length <= 400 && form.rating !== '') {
+      if (form.reviewText.length >= minSymbols && form.reviewText.length <= maxSymbols && form.rating !== '') {
         buttonRef.current.disabled = false;
       } else {
         buttonRef.current.disabled = true;
@@ -52,15 +54,19 @@ function FormComment(): JSX.Element {
     }
   };
 
-  const createField = (counter: number): JSX.Element => (
-    <Fragment key={counter}>
-      <input className="rating__input" id={`star-${counter}`} type="radio" name="rating" value={`${11 - counter}`} onChange={handleFormChange} />
-      <label className="rating__label" htmlFor={`star-${counter}`}>Rating {counter}</label>
-    </Fragment>
-  );
+  const createField = (counter: number): JSX.Element => {
+    const corrector = 11;
+    return (
+      <Fragment key={counter}>
+        <input className="rating__input" id={`star-${counter}`} type="radio" name="rating" value={`${corrector - counter}`} onChange={handleFormChange} />
+        <label className="rating__label" htmlFor={`star-${counter}`}>Rating {counter}</label>
+      </Fragment>
+    );
+  };
 
   const createRatingStars = (): JSX.Element[] => {
-    const stars = Array.from({ length: 10 }, (_, i) => createField(1 + i));
+    const counter = 1;
+    const stars = Array.from({ length: 10 }, (_, i) => createField(counter + i));
     return stars;
   };
 

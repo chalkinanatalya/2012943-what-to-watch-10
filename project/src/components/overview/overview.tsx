@@ -5,13 +5,18 @@ type OverviewProps = {
 };
 
 const getRatingLevel = (rating: number): string => {
-  if (rating < 3) {
+  const bad = 3;
+  const normal = 5;
+  const good = 8;
+  const veryGood = 10;
+
+  if (rating < bad) {
     return 'Bad';
-  } else if (rating >= 3 && rating < 5) {
+  } else if (rating >= bad && rating < normal) {
     return 'Normal';
-  } else if (rating >= 5 && rating < 8) {
+  } else if (rating >= normal && rating < good) {
     return 'Good';
-  } else if (rating >= 8 && rating < 10) {
+  } else if (rating >= good && rating < veryGood) {
     return 'Very good';
   } else {
     return 'Awesome';
