@@ -10,7 +10,7 @@ import { generatePath } from 'react-router-dom';
 
 const mockStore = configureMockStore();
 const mockFilm = makeFakeFilm();
-const mockFilms = new Array(10).fill(null).map(() => (mockFilm));
+const mockFilms = new Array(1).fill(null).map(() => (mockFilm));
 
 const store = mockStore({
   USER: {

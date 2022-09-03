@@ -7,10 +7,7 @@ import { getFilms } from '../../store/film-store/selector';
 function NotFound(): JSX.Element {
   const films = useAppSelector(getFilms);
 
-  const getNoLink = (): JSX.Element => {
-    const randomFilm = Math.floor(Math.random() * films.length);
-    return <p><Link to={generatePath(AppRoute.Film, { id: String(randomFilm) })} className="no">NO, I&apos;m Feeling Lucky</Link></p>;
-  };
+  const getNoLink = (): JSX.Element => <p><Link to={generatePath(AppRoute.Film, { id: String(films[0].id) })} className="no">NO, I&apos;m Feeling Lucky</Link></p>;
 
   return (
     <div className='not-found-container'>
