@@ -6,8 +6,8 @@ type DetailsProps = {
 };
 
 const formatTime = (minutes: number): string => {
-  const hours = Math.floor(minutes / Time.minPerHour);
-  const minutesString = (minutes >= Time.minimumTens) ? minutes - (hours * Time.minPerHour) : `0${minutes}`;
+  const hours = Math.floor(minutes / Time.MinPerHour);
+  const minutesString = (minutes >= Time.MinimumTens) ? minutes - (hours * Time.MinPerHour) : `0${minutes}`;
 
   return (hours ? `${hours}h ${minutesString}m` : `${minutesString}m`);
 };

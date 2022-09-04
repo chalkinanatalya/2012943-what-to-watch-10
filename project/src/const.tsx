@@ -34,9 +34,9 @@ export enum NameSpace {
 }
 
 export enum Time {
-  secPerMin = 60,
-  minPerHour = 60,
-  minimumTens = 10
+  SecPerMin = 60,
+  MinPerHour = 60,
+  MinimumTens = 10
 }
 
 export const AllGENRES = 'All genres';
