@@ -6,13 +6,13 @@ export enum AppRoute {
   Film = '/films/:id',
   AddReview = '/films/:id/review',
   Player = '/player/:id/:filmType',
-  NotFound = '/404',
+  NotFound = '/404'
 }
 
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',
-  Unknown = 'UNKNOWN',
+  Unknown = 'UNKNOWN'
 }
 
 export enum APIRoute {
@@ -24,13 +24,19 @@ export enum APIRoute {
   StatusFavorite = '/favorite/:filmId/:status',
   Comments = '/comments/:filmId',
   Login = '/login',
-  Logout = '/logout',
+  Logout = '/logout'
 }
 
 export enum NameSpace {
   Film = 'FILM',
   User = 'USER',
   Comment = 'COMMENT'
+}
+
+export enum Time {
+  secPerMin = 60,
+  minPerHour = 60,
+  minimumTens = 10
 }
 
 export const AllGENRES = 'All genres';

@@ -44,7 +44,7 @@ describe('Component: NotFoundScreen', () => {
     render(fakeApp);
 
     expect(screen.getByText(/Page not found/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'NO, I\'m Feeling Lucky' })).toHaveAttribute('href', `/film/${mockFilm.id}`);
+    expect(screen.getByRole('link', { name: 'NO, I\'m Feeling Lucky' })).toHaveAttribute('href', `/films/${mockFilm.id}`);
 
   });
 });

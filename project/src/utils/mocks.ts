@@ -1,5 +1,6 @@
-import { datatype, system, name, internet, image, commerce, music, time, company } from 'faker';
+import { datatype, system, name, internet, image, commerce, music, time, company, lorem, date } from 'faker';
 import { Film } from '../types/film';
+import { Comment } from '../types/comment';
 
 export const makeFakeFilm = (): Film => ({
   id: datatype.number(),
@@ -20,3 +21,14 @@ export const makeFakeFilm = (): Film => ({
   released: time.recent(),
   isFavorite: datatype.boolean(),
 } as Film);
+
+export const makeFakeComment = (): Comment => ({
+  comment: lorem.word(),
+  date: date.recent().toString(),
+  id: datatype.number(),
+  rating: datatype.number(),
+  user: {
+    id: datatype.number(),
+    name: name.title(),
+  },
+} as Comment);

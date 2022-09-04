@@ -1,3 +1,4 @@
+import { Time } from '../../const';
 import { Film } from '../../types/film';
 
 type DetailsProps = {
@@ -5,8 +6,8 @@ type DetailsProps = {
 };
 
 const formatTime = (minutes: number): string => {
-  const hours = Math.floor(minutes / 60);
-  const minutesString = (minutes >= 10) ? minutes - (hours * 60) : `0${minutes}`;
+  const hours = Math.floor(minutes / Time.minPerHour);
+  const minutesString = (minutes >= Time.minimumTens) ? minutes - (hours * Time.minPerHour) : `0${minutes}`;
 
   return (hours ? `${hours}h ${minutesString}m` : `${minutesString}m`);
 };

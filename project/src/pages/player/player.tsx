@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 import NotFound from '../../components/not-found/not-found';
-import { AppRoute } from '../../const';
+import { AppRoute, Time } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { redirectToRoute } from '../../store/action';
 import { getFilms } from '../../store/film-store/selector';
@@ -29,14 +29,11 @@ function Player(): JSX.Element {
   const timerRef = useRef<HTMLDivElement | null>(null);
 
   const formatTime = (seconds: number): string => {
-    const secPerMin = 60;
-    const minPerHour = 60;
-    const minimumTens = 10;
-    const hours = Math.floor(seconds / (secPerMin * minPerHour));
-    const minutes = Math.floor(seconds / secPerMin);
-    const hoursString = (hours >= minimumTens) ? hours : `0${hours}`;
-    const minutesString = (minutes >= minimumTens) ? minutes - (hours * minPerHour) : `0${minutes}`;
-    const secondsString = (seconds >= minimumTens) ? seconds - (minutes * secPerMin) : `0${seconds}`;
+    const hours = Math.floor(seconds / (Time.secPerMin * Time.minPerHour));
+    const minutes = Math.floor(seconds / Time.secPerMin);
+    const hoursString = (hours >= Time.minimumTens) ? hours : `0${hours}`;
+    const minutesString = (minutes >= Time.minimumTens) ? minutes - (hours * Time.minPerHour) : `0${minutes}`;
+    const secondsString = (seconds >= Time.minimumTens) ? seconds - (minutes * Time.secPerMin) : `0${seconds}`;
 
     return (hours ? `-${hoursString}:${minutesString}:${secondsString}` : `-${minutesString}:${secondsString}`);
   };
